@@ -24,7 +24,7 @@ const Sidebar = () => {
     { icon: Users, label: 'WebID', path: '/webid', active: location.pathname === '/webid' },
     { icon: MessageSquare, label: 'AI Co-Pilot', path: '/ai-chat', active: location.pathname === '/ai-chat' },
     { icon: Target, label: 'Campaigns', path: '/campaigns', active: location.pathname === '/campaigns' },
-    { icon: TrendingUp, label: 'Analytics', path: '/analytics', active: location.pathname === '/analytics' },
+    { icon: TrendingUp, label: 'Dashboards', path: '/dashboards', active: location.pathname === '/dashboards' },
   ];
 
   const bottomItems = [
