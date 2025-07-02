@@ -11,7 +11,10 @@ import {
   Sparkles,
   TrendingUp,
   TrendingDown,
-  Minus
+  Minus,
+  RefreshCw,
+  Settings,
+  PinIcon
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 
@@ -92,7 +95,20 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             {message.hasChart && message.chartData && (
               <Card className="mb-6">
                 <CardHeader>
-                  <CardTitle className="text-lg">Creative Performance Analysis</CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg">Creative Performance Analysis</CardTitle>
+                    <div className="flex items-center space-x-2">
+                      <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                        <RefreshCw className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                        <Settings className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                        <PinIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="h-80">
@@ -115,7 +131,20 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             {message.hasTable && message.tableData && (
               <Card className="mb-6">
                 <CardHeader>
-                  <CardTitle className="text-lg">Creative Performance Details</CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg">Creative Performance Details</CardTitle>
+                    <div className="flex items-center space-x-2">
+                      <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                        <RefreshCw className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                        <Settings className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                        <PinIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-x-auto">
