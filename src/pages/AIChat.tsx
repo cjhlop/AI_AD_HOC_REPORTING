@@ -16,7 +16,12 @@ import {
   Sparkles,
   BarChart3,
   Users,
-  History
+  History,
+  ArrowRight,
+  TrendingUp,
+  Eye,
+  Target,
+  Calendar
 } from 'lucide-react';
 
 const AIChat = () => {
@@ -31,12 +36,42 @@ const AIChat = () => {
   ];
 
   const suggestedPrompts = [
-    "Show me top performing campaigns this month",
-    "Which creative drove 80% of MQLs?",
-    "Compare CPC trends vs last quarter",
-    "Show US-based SaaS visitors from pricing page",
-    "Weekly performance breakdown by campaign",
-    "Visitor conversion funnel analysis"
+    {
+      text: "Show me top performing campaigns this month",
+      icon: TrendingUp,
+      category: "Performance",
+      color: "bg-green-50 border-green-200 hover:bg-green-100"
+    },
+    {
+      text: "Which creative drove 80% of MQLs?",
+      icon: Target,
+      category: "Optimization",
+      color: "bg-blue-50 border-blue-200 hover:bg-blue-100"
+    },
+    {
+      text: "Compare CPC trends vs last quarter",
+      icon: BarChart3,
+      category: "Analysis",
+      color: "bg-purple-50 border-purple-200 hover:bg-purple-100"
+    },
+    {
+      text: "Show US-based SaaS visitors from pricing page",
+      icon: Eye,
+      category: "Visitors",
+      color: "bg-orange-50 border-orange-200 hover:bg-orange-100"
+    },
+    {
+      text: "Weekly performance breakdown by campaign",
+      icon: Calendar,
+      category: "Reporting",
+      color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100"
+    },
+    {
+      text: "Visitor conversion funnel analysis",
+      icon: Users,
+      category: "Conversion",
+      color: "bg-pink-50 border-pink-200 hover:bg-pink-100"
+    }
   ];
 
   const recentChats = [
@@ -264,7 +299,7 @@ const AIChat = () => {
               {chatHistory.length === 0 ? (
                 /* Empty State */
                 <div className="flex-1 flex items-center justify-center p-8">
-                  <div className="text-center max-w-2xl">
+                  <div className="text-center max-w-4xl">
                     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                       <MessageSquare className="w-8 h-8 text-blue-600" />
                     </div>
@@ -277,14 +312,34 @@ const AIChat = () => {
                     </p>
 
                     {/* Suggested Prompts */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                      {suggestedPrompts.slice(0, 4).map((prompt, index) => (
-                        <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleSuggestedPrompt(prompt)}>
-                          <CardContent className="p-4">
-                            <p className="text-sm text-gray-700 text-left">{prompt}</p>
-                          </CardContent>
-                        </Card>
-                      ))}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                      {suggestedPrompts.map((prompt, index) => {
+                        const Icon = prompt.icon;
+                        return (
+                          <Card 
+                            key={index} 
+                            className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 ${prompt.color}`}
+                            onClick={() => handleSuggestedPrompt(prompt.text)}
+                          >
+                            <CardContent className="p-5">
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                                    <Icon className="w-4 h-4 text-gray-600" />
+                                  </div>
+                                  <Badge variant="secondary" className="text-xs px-2 py-1">
+                                    {prompt.category}
+                                  </Badge>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </div>
+                              <p className="text-sm text-gray-800 font-medium leading-relaxed text-left">
+                                {prompt.text}
+                              </p>
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -330,10 +385,11 @@ const AIChat = () => {
                               key={index}
                               size="sm"
                               variant="outline"
-                              className="text-xs"
-                              onClick={() => handleSuggestedPrompt(prompt)}
+                              className="text-xs hover:bg-gray-50"
+                              onClick={() => handleSuggestedPrompt(prompt.text)}
                             >
-                              {prompt}
+                              <prompt.icon className="w-3 h-3 mr-1" />
+                              {prompt.text}
                             </Button>
                           ))}
                         </div>
