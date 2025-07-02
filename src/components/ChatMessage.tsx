@@ -101,25 +101,23 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           {/* Insights Cards */}
           {message.insights && (
             <div className="mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-semibold text-gray-900">Key Insights</h4>
-                <div className="flex items-center space-x-2">
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <RotateCcw className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Settings className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Download className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-80">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Key Insights</h4>
+              <div className="space-y-4">
                 {message.insights.map((insight, index) => (
-                  <Card key={index} className="border-l-4 border-l-blue-500 h-full">
+                  <Card key={index} className="border-l-4 border-l-blue-500 h-80 relative">
                     <CardContent className="p-6 h-full flex flex-col justify-center">
-                      <div className="flex items-center justify-between mb-4">
+                      <div className="absolute top-4 right-4 flex items-center space-x-2">
+                        <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                          <RotateCcw className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                          <Settings className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div className="flex items-center justify-between mb-4 pr-32">
                         <div className="flex-1">
                           <p className="text-sm text-gray-600 mb-2">{insight.label}</p>
                           <p className="text-2xl font-bold text-gray-900 mb-2">{insight.value}</p>
