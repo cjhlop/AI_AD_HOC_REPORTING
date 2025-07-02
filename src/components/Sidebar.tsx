@@ -11,7 +11,8 @@ import {
   ChevronDown,
   Building2,
   Target,
-  TrendingUp
+  TrendingUp,
+  Zap
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -22,7 +23,7 @@ const Sidebar = () => {
     { icon: LayoutDashboard, label: 'Dashboard', path: '/', active: location.pathname === '/' },
     { icon: BarChart3, label: 'LinkedIn Ads', path: '/linkedin-ads', active: location.pathname === '/linkedin-ads' },
     { icon: Users, label: 'WebID', path: '/webid', active: location.pathname === '/webid' },
-    { icon: MessageSquare, label: 'AI Co-Pilot', path: '/ai-chat', active: location.pathname === '/ai-chat', isAI: true },
+    { icon: Zap, label: 'AI Co-Pilot', path: '/ai-chat', active: location.pathname === '/ai-chat', isAI: true },
     { icon: Target, label: 'Campaigns', path: '/campaigns', active: location.pathname === '/campaigns' },
     { icon: TrendingUp, label: 'Dashboards', path: '/dashboards', active: location.pathname === '/dashboards' },
   ];
@@ -66,68 +67,65 @@ const Sidebar = () => {
               return (
                 <Link key={item.path} to={item.path}>
                   <Button
-                    variant={item.active ? "secondary" : "ghost"}
+                    variant="ghost"
                     className={`
                       w-full justify-start relative overflow-hidden group
+                      bg-transparent hover:bg-transparent
                       ${item.active 
-                        ? 'bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 text-purple-700 border border-purple-200/50 shadow-lg shadow-purple-500/10' 
-                        : 'text-gray-700 hover:bg-gradient-to-r hover:from-purple-500/5 hover:via-blue-500/5 hover:to-cyan-500/5 hover:text-purple-600 hover:border-purple-200/30 hover:shadow-md hover:shadow-purple-500/5'
+                        ? 'text-purple-700' 
+                        : 'text-gray-700 hover:text-purple-600'
                       }
-                      transition-all duration-500 ease-out
-                      before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-500/20 before:via-blue-500/20 before:to-cyan-500/20 
-                      before:opacity-0 before:transition-opacity before:duration-500
-                      hover:before:opacity-100
-                      after:absolute after:top-0 after:left-[-100%] after:w-full after:h-full 
-                      after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent
-                      after:transition-all after:duration-700 after:ease-out
-                      hover:after:left-[100%]
+                      transition-all duration-700 ease-out
+                      border border-transparent rounded-md
                     `}
+                    style={{
+                      background: 'transparent',
+                      borderImage: item.active 
+                        ? 'linear-gradient(90deg, #a855f7, #3b82f6, #06b6d4, #a855f7) 1'
+                        : 'none'
+                    }}
                   >
-                    <div className="relative z-10 flex items-center">
+                    {/* Animated gradient border */}
+                    <div className={`
+                      absolute inset-0 rounded-md p-[1px] 
+                      bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500
+                      ${item.active ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}
+                      transition-opacity duration-700
+                    `}>
+                      <div className="w-full h-full bg-white rounded-[calc(0.375rem-1px)]" />
+                    </div>
+                    
+                    {/* Rotating gradient border animation */}
+                    <div className={`
+                      absolute inset-0 rounded-md
+                      bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 via-purple-500
+                      ${item.active ? 'animate-spin opacity-60' : 'opacity-0 group-hover:opacity-40 group-hover:animate-spin'}
+                      transition-opacity duration-500
+                    `} style={{
+                      background: 'conic-gradient(from 0deg, #a855f7, #3b82f6, #06b6d4, #a855f7)',
+                      mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                      maskComposite: 'xor',
+                      WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                      WebkitMaskComposite: 'xor',
+                      padding: '1px',
+                      animationDuration: '3s'
+                    }} />
+
+                    <div className="relative z-10 flex items-center w-full">
                       <Icon className={`
-                        w-4 h-4 mr-3 transition-all duration-500
+                        w-4 h-4 mr-3 transition-all duration-700 ease-out
                         ${item.active 
-                          ? 'text-purple-600 drop-shadow-sm animate-pulse' 
-                          : 'group-hover:text-purple-500 group-hover:drop-shadow-sm group-hover:scale-110'
+                          ? 'text-purple-600 drop-shadow-lg filter brightness-125' 
+                          : 'group-hover:text-purple-500 group-hover:drop-shadow-lg group-hover:filter group-hover:brightness-125 group-hover:scale-105'
                         }
                       `} />
                       <span className={`
-                        font-medium transition-all duration-300
+                        font-medium transition-all duration-500
                         ${item.active ? 'text-purple-700' : 'group-hover:text-purple-600'}
                       `}>
                         {item.label}
                       </span>
-                      
-                      {/* Magical sparkle effect */}
-                      <div className={`
-                        absolute -top-1 -right-1 w-2 h-2 rounded-full 
-                        bg-gradient-to-r from-purple-400 to-cyan-400
-                        ${item.active ? 'animate-ping opacity-75' : 'opacity-0 group-hover:opacity-75 group-hover:animate-ping'}
-                        transition-opacity duration-300
-                      `} />
-                      
-                      {/* Secondary sparkle */}
-                      <div className={`
-                        absolute top-1 right-2 w-1 h-1 rounded-full 
-                        bg-gradient-to-r from-blue-400 to-purple-400
-                        ${item.active ? 'animate-pulse opacity-60' : 'opacity-0 group-hover:opacity-60 group-hover:animate-pulse'}
-                        transition-opacity duration-500 delay-150
-                      `} />
                     </div>
-                    
-                    {/* Animated border glow */}
-                    <div className={`
-                      absolute inset-0 rounded-md border border-transparent
-                      bg-gradient-to-r from-purple-500/30 via-blue-500/30 to-cyan-500/30
-                      opacity-0 transition-opacity duration-500
-                      ${item.active ? 'opacity-100' : 'group-hover:opacity-50'}
-                    `} style={{
-                      background: item.active 
-                        ? 'linear-gradient(90deg, rgba(168,85,247,0.3) 0%, rgba(59,130,246,0.3) 50%, rgba(6,182,212,0.3) 100%)'
-                        : undefined,
-                      maskImage: 'linear-gradient(0deg, transparent, black 20%, black 80%, transparent)',
-                      WebkitMaskImage: 'linear-gradient(0deg, transparent, black 20%, black 80%, transparent)'
-                    }} />
                   </Button>
                 </Link>
               );
