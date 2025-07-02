@@ -155,20 +155,89 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
               </Card>
             )}
 
+            {/* Analysis & Conclusions */}
+            <div className="mb-6 space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">📊 Analysis Summary</h3>
+              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                <p className="text-sm text-gray-800 leading-relaxed">
+                  <strong>Performance Overview:</strong> Your creative portfolio shows significant variation in performance, with Creative A emerging as the clear winner. The data reveals a 128% performance gap between your best and worst performing creatives, indicating substantial optimization opportunities.
+                </p>
+                <p className="text-sm text-gray-800 leading-relaxed">
+                  <strong>Key Findings:</strong> Creative A demonstrates exceptional efficiency with a 3.2% CTR (60% above campaign average) and the lowest CPA at $67. In contrast, Creative C is underperforming with a 1.4% CTR and CPA of $156 - more than double your target cost per acquisition.
+                </p>
+                <p className="text-sm text-gray-800 leading-relaxed">
+                  <strong>Budget Impact:</strong> Currently, your budget allocation doesn't align with performance. Creative A, despite driving 33% of total conversions, likely receives equal budget share. Reallocating spend could improve overall campaign ROAS by an estimated 25-30%.
+                </p>
+              </div>
+            </div>
+
+            {/* Strategic Insights */}
+            <div className="mb-6 space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">🎯 Strategic Insights</h3>
+              <div className="bg-blue-50 rounded-lg p-4 space-y-3">
+                <p className="text-sm text-blue-900 leading-relaxed">
+                  <strong>Creative Messaging Analysis:</strong> "Transform Your Business" (Creative A) resonates strongly with your target audience, suggesting transformation-focused messaging outperforms feature-based copy. This insight should inform future creative development.
+                </p>
+                <p className="text-sm text-blue-900 leading-relaxed">
+                  <strong>Audience Alignment:</strong> The performance variance suggests different creatives appeal to different audience segments. Creative B shows promise but may need audience refinement or different placement strategies to reach its full potential.
+                </p>
+                <p className="text-sm text-blue-900 leading-relaxed">
+                  <strong>Competitive Positioning:</strong> Your top-performing creative's 3.2% CTR significantly exceeds industry benchmarks (typically 0.9-2.1% for LinkedIn), indicating strong market positioning and message-market fit.
+                </p>
+              </div>
+            </div>
+
             {/* Recommendations */}
-            <Card className="mb-6 bg-blue-50 border-blue-200">
+            <Card className="mb-6 bg-green-50 border-green-200">
               <CardHeader>
-                <CardTitle className="text-lg text-blue-900">💡 Recommendations</CardTitle>
+                <CardTitle className="text-lg text-green-900">💡 Actionable Recommendations</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-sm text-blue-800">
-                  <li>• <strong>Scale Creative A:</strong> Increase budget by 40% - it's driving 65% of conversions with lowest CPA</li>
-                  <li>• <strong>Pause Creative C:</strong> CTR is 60% below average and CPA is 2.3x higher than target</li>
-                  <li>• <strong>Test variations:</strong> Create 2-3 variations of Creative A with different headlines</li>
-                  <li>• <strong>Audience optimization:</strong> Creative B performs better with 35-44 age group</li>
-                </ul>
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">1</div>
+                    <div>
+                      <p className="text-sm font-medium text-green-900">Immediate Budget Reallocation</p>
+                      <p className="text-xs text-green-800">Increase Creative A budget by 40% and reduce Creative C by 60%. Expected impact: +$2,340 monthly savings with 25% more conversions.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</div>
+                    <div>
+                      <p className="text-sm font-medium text-green-900">Creative Testing Program</p>
+                      <p className="text-xs text-green-800">Launch 3 variations of Creative A with different headlines. Test "Accelerate Growth", "Drive Innovation", and "Unlock Potential" messaging.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">3</div>
+                    <div>
+                      <p className="text-sm font-medium text-green-900">Audience Optimization</p>
+                      <p className="text-xs text-green-800">Analyze Creative B's audience data - it may perform better with specific job titles or company sizes. Consider separate campaigns for different segments.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">4</div>
+                    <div>
+                      <p className="text-sm font-medium text-green-900">Performance Monitoring</p>
+                      <p className="text-xs text-green-800">Set up automated alerts when CPA exceeds $120 or CTR drops below 2.0%. Review creative performance weekly to catch declining trends early.</p>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
+
+            {/* Next Steps */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">🚀 Next Steps</h3>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-900 leading-relaxed">
+                  <strong>Timeline:</strong> Implement budget changes within 24 hours to capture immediate savings. Launch creative tests by end of week. Schedule follow-up analysis in 14 days to measure impact and refine strategy further.
+                </p>
+                <p className="text-sm text-yellow-900 leading-relaxed mt-2">
+                  <strong>Expected Outcome:</strong> These optimizations should improve overall campaign efficiency by 20-30%, reduce average CPA to $75-80, and increase monthly conversion volume by 15-20 conversions.
+                </p>
+              </div>
+            </div>
 
             {/* Action Buttons */}
             <div className="flex items-center space-x-2 pt-4 border-t border-gray-100">
@@ -178,11 +247,11 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
               </Button>
               <Button size="sm" variant="outline">
                 <Download className="w-3 h-3 mr-1" />
-                Export CSV
+                Export Report
               </Button>
               <Button size="sm" variant="outline">
                 <Copy className="w-3 h-3 mr-1" />
-                Copy SQL
+                Copy Analysis
               </Button>
               <div className="flex-1" />
               <Button size="sm" variant="ghost">
