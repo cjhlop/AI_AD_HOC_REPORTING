@@ -376,24 +376,6 @@ const AIChat = () => {
                           <Send className="w-4 h-4" />
                         </Button>
                       </div>
-                      
-                      {/* Quick Prompts */}
-                      {chatHistory.length === 0 && (
-                        <div className="flex flex-wrap gap-2 mt-3">
-                          {suggestedPrompts.slice(0, 3).map((prompt, index) => (
-                            <Button
-                              key={index}
-                              size="sm"
-                              variant="outline"
-                              className="text-xs hover:bg-gray-50"
-                              onClick={() => handleSuggestedPrompt(prompt.text)}
-                            >
-                              <prompt.icon className="w-3 h-3 mr-1" />
-                              {prompt.text}
-                            </Button>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </div>
                   
