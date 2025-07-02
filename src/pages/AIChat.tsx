@@ -151,11 +151,11 @@ const AIChat = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Main DemandSense Sidebar */}
+      {/* Fixed Main DemandSense Sidebar */}
       <Sidebar />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
+      {/* Main Content Area - with left margin to account for fixed sidebar */}
+      <div className="flex-1 flex flex-col ml-64">
         {/* Header */}
         <Header />
 
@@ -166,7 +166,7 @@ const AIChat = () => {
             {/* Chat Header */}
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">AI Chat</h2>
+                <h2 className="text-lg font-semibold text-gray-900">AI Co-Pilot</h2>
                 <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                   <Plus className="w-4 h-4 mr-2" />
                   New Chat
@@ -269,7 +269,7 @@ const AIChat = () => {
                       <MessageSquare className="w-8 h-8 text-blue-600" />
                     </div>
                     <h3 className="text-2xl font-semibold text-gray-900 mb-2">
-                      Welcome to DemandSense AI
+                      Welcome to DemandSense AI Co-Pilot
                     </h3>
                     <p className="text-gray-600 mb-8">
                       Ask questions about your LinkedIn Ads performance and WebID visitor analytics. 

@@ -22,7 +22,7 @@ const Sidebar = () => {
     { icon: LayoutDashboard, label: 'Dashboard', path: '/', active: location.pathname === '/' },
     { icon: BarChart3, label: 'LinkedIn Ads', path: '/linkedin-ads', active: location.pathname === '/linkedin-ads' },
     { icon: Users, label: 'WebID', path: '/webid', active: location.pathname === '/webid' },
-    { icon: MessageSquare, label: 'AI Chat', path: '/ai-chat', active: location.pathname === '/ai-chat' },
+    { icon: MessageSquare, label: 'AI Co-Pilot', path: '/ai-chat', active: location.pathname === '/ai-chat' },
     { icon: Target, label: 'Campaigns', path: '/campaigns', active: location.pathname === '/campaigns' },
     { icon: TrendingUp, label: 'Analytics', path: '/analytics', active: location.pathname === '/analytics' },
   ];
@@ -33,7 +33,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
+    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen fixed left-0 top-0">
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center space-x-3">
