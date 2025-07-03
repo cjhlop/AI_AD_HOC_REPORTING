@@ -105,10 +105,6 @@ const Dashboards = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Button variant="outline" size="sm">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filter
-                </Button>
-                <Button variant="outline" size="sm">
                   <Calendar className="w-4 h-4 mr-2" />
                   Last 30 days
                 </Button>
@@ -119,10 +115,6 @@ const Dashboards = () => {
                 <Button variant="outline" size="sm">
                   <Share className="w-4 h-4 mr-2" />
                   Share
-                </Button>
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Widget
                 </Button>
               </div>
             </div>
