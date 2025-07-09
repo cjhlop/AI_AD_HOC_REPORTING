@@ -103,10 +103,10 @@ const AIChat = () => {
     .filter(p => promptFilter === 'all' || p.type === promptFilter);
 
   const recentChats = [
-    { id: 1, title: "Campaign performance analysis", time: "2 hours ago", pinned: false },
-    { id: 2, title: "Creative optimization insights", time: "Yesterday", pinned: true, icon: Target },
-    { id: 3, title: "Visitor behavior patterns", time: "2 days ago", pinned: false },
-    { id: 4, title: "CPC trend analysis", time: "3 days ago", pinned: true, icon: BarChart3 },
+    { id: 1, title: "Campaign performance analysis", time: "2 hours ago", pinned: false, isRecurring: false },
+    { id: 2, title: "Creative optimization insights", time: "Yesterday", pinned: true, icon: Target, isRecurring: true },
+    { id: 3, title: "Visitor behavior patterns", time: "2 days ago", pinned: false, isRecurring: false },
+    { id: 4, title: "CPC trend analysis", time: "3 days ago", pinned: true, icon: BarChart3, isRecurring: false },
   ];
 
   const sampleCreativeData = {
@@ -218,7 +218,10 @@ const AIChat = () => {
                       className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer border border-gray-100"
                       onClick={() => chat.title === "Creative optimization insights" && loadCreativeOptimizationChat()}
                     >
-                      <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
+                        {chat.isRecurring && <Badge variant="secondary">Recurring</Badge>}
+                      </div>
                       <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
                     </div>
                   ))}
