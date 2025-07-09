@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import ChatMessage from '@/components/ChatMessage';
+import { ChatMessage } from '@/components/ChatMessage';
 import TypingIndicator from '@/components/chat/TypingIndicator';
 import CommandMenu from '@/components/CommandMenu';
 import { 
@@ -331,7 +331,7 @@ const AIChat = () => {
                 <ScrollArea className="flex-1" ref={scrollAreaRef}>
                   <div className="space-y-6 max-w-5xl mx-auto p-6">
                     {chatHistory.map(msg => (
-                      <ChatMessage key={msg.id} message={msg} />
+                      <ChatMessage key={msg.id} message={msg as any} />
                     ))}
                     {isLoading && <TypingIndicator />}
                   </div>
