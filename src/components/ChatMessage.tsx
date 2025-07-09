@@ -21,6 +21,7 @@ export interface Message {
   insights?: any[]
   chartData?: any
   tableData?: any[]
+  closingContent?: string
 }
 
 interface ChatMessageProps {
@@ -95,14 +96,20 @@ export function ChatMessage({ message }: ChatMessageProps) {
       <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
         <span className="text-sm font-semibold text-gray-600">AI</span>
       </div>
-      <div className="flex-1 space-y-4">
-        <div className="bg-white rounded-lg border border-gray-200 px-4 py-3 shadow-sm">
-          <p className="text-sm text-gray-800">{message.content}</p>
+      <div className="flex-1 space-y-3">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 space-y-4">
+          <p className="text-sm text-gray-800 leading-relaxed">{message.content}</p>
+          
+          {message.insights && <KeyInsights insights={message.insights} />}
+          {message.chartData && <AnalysisChart chartData={message.chartData} />}
+          {message.tableData && <AnalysisTable tableData={message.tableData} />}
+
+          {message.closingContent && (
+            <p className="text-sm text-gray-800 pt-4 border-t border-gray-100 mt-4 leading-relaxed">
+              {message.closingContent}
+            </p>
+          )}
         </div>
-        
-        {message.insights && <KeyInsights insights={message.insights} />}
-        {message.chartData && <AnalysisChart chartData={message.chartData} />}
-        {message.tableData && <AnalysisTable tableData={message.tableData} />}
 
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="text-gray-500 hover:bg-gray-100">

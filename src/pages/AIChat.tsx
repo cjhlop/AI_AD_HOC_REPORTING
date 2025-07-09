@@ -131,15 +131,17 @@ const AIChat = () => {
     setMessage('');
     
     setTimeout(() => {
+      const isCreativeQuery = currentMessage.toLowerCase().includes('creative') || currentMessage.toLowerCase().includes('optimization');
       const aiResponse: ChatMessageData = {
         id: Date.now() + 1,
         role: 'assistant',
-        content: currentMessage.toLowerCase().includes('creative') || currentMessage.toLowerCase().includes('optimization')
+        content: isCreativeQuery
           ? "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:"
           : "I'm analyzing your data to provide insights. Here's what I found based on your query...",
-        chartData: sampleCreativeData.chartData,
-        tableData: sampleCreativeData.tableData,
-        insights: sampleCreativeData.insights
+        chartData: isCreativeQuery ? sampleCreativeData.chartData : undefined,
+        tableData: isCreativeQuery ? sampleCreativeData.tableData : undefined,
+        insights: isCreativeQuery ? sampleCreativeData.insights : undefined,
+        closingContent: isCreativeQuery ? "This analysis suggests focusing on creatives similar to 'Creative A' for future campaigns to maximize conversion rates and lower CPA. Let me know if you'd like to explore other metrics or timeframes!" : undefined,
       };
       setChatHistory(prev => [...prev, aiResponse]);
       setIsLoading(false);
@@ -177,7 +179,8 @@ const AIChat = () => {
       content: "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:",
       chartData: sampleCreativeData.chartData,
       tableData: sampleCreativeData.tableData,
-      insights: sampleCreativeData.insights
+      insights: sampleCreativeData.insights,
+      closingContent: "This analysis suggests focusing on creatives similar to 'Creative A' for future campaigns to maximize conversion rates and lower CPA. Let me know if you'd like to explore other metrics or timeframes!"
     };
     setChatHistory([userMessage, aiResponse]);
   };
