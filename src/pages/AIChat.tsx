@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import { ChatMessage } from '@/components/ChatMessage';
+import { ChatMessage, Message as ChatMessageData } from '@/components/ChatMessage';
 import TypingIndicator from '@/components/chat/TypingIndicator';
 import CommandMenu from '@/components/CommandMenu';
 import { 
@@ -26,19 +26,6 @@ import {
   Calendar,
   Slash
 } from 'lucide-react';
-
-interface ChatMessageData {
-  id: number;
-  type: 'user' | 'ai';
-  content: string;
-  timestamp: Date;
-  icon?: React.ElementType;
-  hasChart?: boolean;
-  hasTable?: boolean;
-  chartData?: any;
-  tableData?: any;
-  insights?: any;
-}
 
 const AIChat = () => {
   const [selectedModule, setSelectedModule] = React.useState('Auto');
@@ -134,9 +121,8 @@ const AIChat = () => {
     
     const newMessage: ChatMessageData = {
       id: Date.now(),
-      type: 'user',
+      role: 'user',
       content: currentMessage,
-      timestamp: new Date(),
       icon: prompt?.icon,
     };
     
@@ -147,13 +133,10 @@ const AIChat = () => {
     setTimeout(() => {
       const aiResponse: ChatMessageData = {
         id: Date.now() + 1,
-        type: 'ai',
+        role: 'assistant',
         content: currentMessage.toLowerCase().includes('creative') || currentMessage.toLowerCase().includes('optimization')
           ? "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:"
           : "I'm analyzing your data to provide insights. Here's what I found based on your query...",
-        timestamp: new Date(),
-        hasChart: true,
-        hasTable: true,
         chartData: sampleCreativeData.chartData,
         tableData: sampleCreativeData.tableData,
         insights: sampleCreativeData.insights
@@ -184,18 +167,14 @@ const AIChat = () => {
   const loadCreativeOptimizationChat = () => {
     const userMessage: ChatMessageData = {
       id: Date.now(),
-      type: 'user',
+      role: 'user',
       content: "Show me creative optimization insights for my LinkedIn campaigns",
-      timestamp: new Date(),
       icon: Target,
     };
     const aiResponse: ChatMessageData = {
       id: Date.now() + 1,
-      type: 'ai',
+      role: 'assistant',
       content: "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:",
-      timestamp: new Date(),
-      hasChart: true,
-      hasTable: true,
       chartData: sampleCreativeData.chartData,
       tableData: sampleCreativeData.tableData,
       insights: sampleCreativeData.insights
@@ -331,7 +310,7 @@ const AIChat = () => {
                 <ScrollArea className="flex-1" ref={scrollAreaRef}>
                   <div className="space-y-6 max-w-5xl mx-auto p-6">
                     {chatHistory.map(msg => (
-                      <ChatMessage key={msg.id} message={msg as any} />
+                      <ChatMessage key={msg.id} message={msg} />
                     ))}
                     {isLoading && <TypingIndicator />}
                   </div>
