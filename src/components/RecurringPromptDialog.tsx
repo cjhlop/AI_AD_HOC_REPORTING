@@ -28,8 +28,8 @@ interface RecurringPromptDialogProps {
   frequency: string
 }
 
-// Mock data - assuming Slack is not connected initially
-const isSlackConnected = false
+// Mock data - assuming Slack is connected for demonstration
+const isSlackConnected = true
 const slackChannels = [
   { id: 'C12345', name: '#general' },
   { id: 'C67890', name: '#marketing' },
