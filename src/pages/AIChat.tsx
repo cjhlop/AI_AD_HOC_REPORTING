@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -41,17 +41,17 @@ interface ChatMessageData {
 }
 
 const AIChat = () => {
-  const [selectedModule, setSelectedModule] = useState('Auto');
-  const [message, setMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState<ChatMessageData[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [promptCategory, setPromptCategory] = useState('All');
-  const [promptFilter, setPromptFilter] = useState('all');
-  const [isCommandMenuOpen, setIsCommandMenuOpen] = useState(false);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedModule, setSelectedModule] = React.useState('Auto');
+  const [message, setMessage] = React.useState('');
+  const [chatHistory, setChatHistory] = React.useState<ChatMessageData[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [promptCategory, setPromptCategory] = React.useState('All');
+  const [promptFilter, setPromptFilter] = React.useState('all');
+  const [isCommandMenuOpen, setIsCommandMenuOpen] = React.useState(false);
+  const scrollAreaRef = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTo({
         top: scrollAreaRef.current.scrollHeight,
