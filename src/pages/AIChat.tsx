@@ -4,11 +4,12 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import ChatMessage from '@/components/ChatMessage';
 import TypingIndicator from '@/components/chat/TypingIndicator';
+import CommandMenu from '@/components/CommandMenu';
 import { 
   MessageSquare, 
   Plus, 
@@ -19,22 +20,36 @@ import {
   BarChart3,
   Users,
   History,
-  ArrowRight,
   TrendingUp,
   Eye,
   Target,
   Calendar,
-  Clock
+  Slash
 } from 'lucide-react';
+
+interface ChatMessageData {
+  id: number;
+  type: 'user' | 'ai';
+  content: string;
+  timestamp: Date;
+  icon?: React.ElementType;
+  hasChart?: boolean;
+  hasTable?: boolean;
+  chartData?: any;
+  tableData?: any;
+  insights?: any;
+}
 
 const AIChat = () => {
   const [selectedModule, setSelectedModule] = useState('Auto');
   const [message, setMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState<any[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMessageData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedTimeframe, setSelectedTimeframe] = useState('');
-  const [isTimeframeOpen, setIsTimeframeOpen] = useState(false);
+  const [promptCategory, setPromptCategory] = useState('All');
+  const [promptFilter, setPromptFilter] = useState('all');
+  const [isCommandMenuOpen, setIsCommandMenuOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -51,152 +66,132 @@ const AIChat = () => {
     { id: 'WebID', label: 'WebID', icon: Users }
   ];
 
-  const timeframeOptions = [
-    { label: 'Daily', value: 'daily' },
-    { label: 'Weekly', value: 'weekly' },
-    { label: 'Monthly', value: 'monthly' }
-  ];
-
   const suggestedPrompts = [
     {
       text: "Show me top performing campaigns this month",
       icon: TrendingUp,
       category: "Performance",
+      type: 'frequent',
       color: "bg-green-50 border-green-200 hover:bg-green-100"
     },
     {
       text: "Which creative drove 80% of MQLs?",
       icon: Target,
       category: "Optimization",
+      type: 'frequent',
       color: "bg-blue-50 border-blue-200 hover:bg-blue-100"
     },
     {
       text: "Compare CPC trends vs last quarter",
       icon: BarChart3,
       category: "Analysis",
+      type: 'recent',
       color: "bg-purple-50 border-purple-200 hover:bg-purple-100"
     },
     {
       text: "Show US-based SaaS visitors from pricing page",
       icon: Eye,
       category: "Visitors",
+      type: 'recent',
       color: "bg-orange-50 border-orange-200 hover:bg-orange-100"
     },
     {
       text: "Weekly performance breakdown by campaign",
       icon: Calendar,
       category: "Reporting",
+      type: 'frequent',
       color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100"
     },
     {
       text: "Visitor conversion funnel analysis",
       icon: Users,
       category: "Conversion",
+      type: 'recent',
       color: "bg-pink-50 border-pink-200 hover:bg-pink-100"
     }
   ];
 
+  const filteredPrompts = suggestedPrompts
+    .filter(p => promptCategory === 'All' || p.category === promptCategory)
+    .filter(p => promptFilter === 'all' || p.type === promptFilter);
+
   const recentChats = [
     { id: 1, title: "Campaign performance analysis", time: "2 hours ago", pinned: false },
-    { id: 2, title: "Creative optimization insights", time: "Yesterday", pinned: true },
+    { id: 2, title: "Creative optimization insights", time: "Yesterday", pinned: true, icon: Target },
     { id: 3, title: "Visitor behavior patterns", time: "2 days ago", pinned: false },
-    { id: 4, title: "CPC trend analysis", time: "3 days ago", pinned: true },
+    { id: 4, title: "CPC trend analysis", time: "3 days ago", pinned: true, icon: BarChart3 },
   ];
 
   const sampleCreativeData = {
-    chartData: {
-      barData: [
-        { name: 'Creative A', ctr: 3.2, conversions: 45 },
-        { name: 'Creative B', ctr: 2.1, conversions: 28 },
-        { name: 'Creative C', ctr: 1.4, conversions: 12 },
-        { name: 'Creative D', ctr: 2.8, conversions: 35 },
-        { name: 'Creative E', ctr: 1.9, conversions: 18 }
-      ]
-    },
-    tableData: [
-      { creative: 'Creative A - "Transform Your Business"', impressions: 45230, clicks: 1447, ctr: 3.2, conversions: 45, cpa: 67, status: 'Top Performer' },
-      { creative: 'Creative B - "Unlock Growth Potential"', impressions: 38940, clicks: 818, ctr: 2.1, conversions: 28, cpa: 89, status: 'Good' },
-      { creative: 'Creative C - "Scale Your Operations"', impressions: 52100, clicks: 729, ctr: 1.4, conversions: 12, cpa: 156, status: 'Underperforming' },
-      { creative: 'Creative D - "Drive Results Fast"', impressions: 41200, clicks: 1154, ctr: 2.8, conversions: 35, cpa: 78, status: 'Good' },
-      { creative: 'Creative E - "Boost Efficiency"', impressions: 36800, clicks: 699, ctr: 1.9, conversions: 18, cpa: 112, status: 'Average' }
-    ],
-    insights: [
-      { label: 'Best Performing Creative', value: 'Creative A', trend: 'up', change: '+65% conversion rate' },
-      { label: 'Lowest CPA', value: '$67', trend: 'up', change: '23% below target' },
-      { label: 'Total Conversions', value: '138', trend: 'up', change: '+12% vs last week' }
-    ]
+    chartData: { barData: [ { name: 'Creative A', ctr: 3.2, conversions: 45 }, { name: 'Creative B', ctr: 2.1, conversions: 28 }, { name: 'Creative C', ctr: 1.4, conversions: 12 }, { name: 'Creative D', ctr: 2.8, conversions: 35 }, { name: 'Creative E', ctr: 1.9, conversions: 18 } ] },
+    tableData: [ { creative: 'Creative A - "Transform Your Business"', impressions: 45230, clicks: 1447, ctr: 3.2, conversions: 45, cpa: 67, status: 'Top Performer' }, { creative: 'Creative B - "Unlock Growth Potential"', impressions: 38940, clicks: 818, ctr: 2.1, conversions: 28, cpa: 89, status: 'Good' }, { creative: 'Creative C - "Scale Your Operations"', impressions: 52100, clicks: 729, ctr: 1.4, conversions: 12, cpa: 156, status: 'Underperforming' }, { creative: 'Creative D - "Drive Results Fast"', impressions: 41200, clicks: 1154, ctr: 2.8, conversions: 35, cpa: 78, status: 'Good' }, { creative: 'Creative E - "Boost Efficiency"', impressions: 36800, clicks: 699, ctr: 1.9, conversions: 18, cpa: 112, status: 'Average' } ],
+    insights: [ { label: 'Best Performing Creative', value: 'Creative A', trend: 'up', change: '+65% conversion rate' }, { label: 'Lowest CPA', value: '$67', trend: 'up', change: '23% below target' }, { label: 'Total Conversions', value: '138', trend: 'up', change: '+12% vs last week' } ]
   };
 
-  const handleSendMessage = () => {
-    if (!message.trim()) return;
+  const handleSendMessage = (prompt?: { text: string, icon: React.ElementType }) => {
+    const currentMessage = prompt ? prompt.text : message;
+    if (!currentMessage.trim()) return;
     
-    const newMessage = {
+    const newMessage: ChatMessageData = {
       id: Date.now(),
-      type: 'user' as const,
-      content: message,
-      timestamp: new Date()
+      type: 'user',
+      content: currentMessage,
+      timestamp: new Date(),
+      icon: prompt?.icon,
     };
     
-    setChatHistory([...chatHistory, newMessage]);
+    setChatHistory(prev => [...prev, newMessage]);
     setIsLoading(true);
     setMessage('');
     
     setTimeout(() => {
-      let aiResponse;
-      
-      if (message.toLowerCase().includes('creative') || message.toLowerCase().includes('optimization')) {
-        aiResponse = {
-          id: Date.now() + 1,
-          type: 'ai' as const,
-          content: "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:",
-          timestamp: new Date(),
-          hasChart: true,
-          hasTable: true,
-          chartData: sampleCreativeData.chartData,
-          tableData: sampleCreativeData.tableData,
-          insights: sampleCreativeData.insights
-        };
-      } else {
-        aiResponse = {
-          id: Date.now() + 1,
-          type: 'ai' as const,
-          content: "I'm analyzing your data to provide insights. Here's what I found based on your query...",
-          timestamp: new Date(),
-          hasChart: false,
-          hasTable: false,
-          insights: [
-            { label: 'Key Metric', value: '2.4%', trend: 'up', change: '+15% vs last month' },
-            { label: 'Performance', value: 'Strong', trend: 'up', change: 'Above benchmark' },
-            { label: 'Opportunities', value: '3', trend: 'neutral', change: 'Action items identified' }
-          ]
-        };
-      }
-      
+      const aiResponse: ChatMessageData = {
+        id: Date.now() + 1,
+        type: 'ai',
+        content: currentMessage.toLowerCase().includes('creative') || currentMessage.toLowerCase().includes('optimization')
+          ? "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:"
+          : "I'm analyzing your data to provide insights. Here's what I found based on your query...",
+        timestamp: new Date(),
+        hasChart: true,
+        hasTable: true,
+        chartData: sampleCreativeData.chartData,
+        tableData: sampleCreativeData.tableData,
+        insights: sampleCreativeData.insights
+      };
       setChatHistory(prev => [...prev, aiResponse]);
       setIsLoading(false);
     }, 1500);
   };
 
-  const handleSuggestedPrompt = (prompt: string) => {
-    setMessage(prompt);
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setMessage(value);
+    setIsCommandMenuOpen(value.startsWith('/'));
   };
 
-  const handleTimeframeSelect = (timeframe: string) => {
-    setSelectedTimeframe(timeframe);
-    setIsTimeframeOpen(false);
+  const handleCommandSelect = (command: string) => {
+    setMessage(command + ' ');
+    setIsCommandMenuOpen(false);
+    inputRef.current?.focus();
+  };
+
+  const handleSlashClick = () => {
+    setMessage('/');
+    setIsCommandMenuOpen(true);
+    inputRef.current?.focus();
   };
 
   const loadCreativeOptimizationChat = () => {
-    const userMessage = {
+    const userMessage: ChatMessageData = {
       id: Date.now(),
-      type: 'user' as const,
+      type: 'user',
       content: "Show me creative optimization insights for my LinkedIn campaigns",
-      timestamp: new Date()
+      timestamp: new Date(),
+      icon: Target,
     };
-    
-    const aiResponse = {
+    const aiResponse: ChatMessageData = {
       id: Date.now() + 1,
-      type: 'ai' as const,
+      type: 'ai',
       content: "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:",
       timestamp: new Date(),
       hasChart: true,
@@ -205,7 +200,6 @@ const AIChat = () => {
       tableData: sampleCreativeData.tableData,
       insights: sampleCreativeData.insights
     };
-    
     setChatHistory([userMessage, aiResponse]);
   };
 
@@ -273,11 +267,7 @@ const AIChat = () => {
                     <Badge
                       key={module.id}
                       variant={selectedModule === module.id ? "default" : "outline"}
-                      className={`cursor-pointer px-3 py-1 ${
-                        selectedModule === module.id 
-                          ? 'bg-blue-600 hover:bg-blue-700' 
-                          : 'hover:bg-gray-100'
-                      }`}
+                      className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-100' }`}
                       onClick={() => setSelectedModule(module.id)}
                     >
                       <Icon className="w-3 h-3 mr-1" />
@@ -294,33 +284,42 @@ const AIChat = () => {
                     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                       <MessageSquare className="w-8 h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">
-                      Welcome to DemandSense AI Co-Pilot
-                    </h3>
-                    <p className="text-gray-600 mb-8">
-                      Ask questions about your LinkedIn Ads performance and WebID visitor analytics.
-                    </p>
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">Welcome to DemandSense AI Co-Pilot</h3>
+                    <p className="text-gray-600 mb-8">Ask questions about your LinkedIn Ads performance and WebID visitor analytics.</p>
+                    
+                    <div className="mb-4">
+                      <div className="flex justify-center gap-4 mb-4">
+                        <ToggleGroup type="single" value={promptCategory} onValueChange={(v) => v && setPromptCategory(v)} size="sm">
+                          <ToggleGroupItem value="All">All</ToggleGroupItem>
+                          <ToggleGroupItem value="Performance">Performance</ToggleGroupItem>
+                          <ToggleGroupItem value="Optimization">Optimization</ToggleGroupItem>
+                          <ToggleGroupItem value="Analysis">Analysis</ToggleGroupItem>
+                        </ToggleGroup>
+                        <ToggleGroup type="single" value={promptFilter} onValueChange={(v) => v && setPromptFilter(v)} size="sm">
+                          <ToggleGroupItem value="all">All</ToggleGroupItem>
+                          <ToggleGroupItem value="frequent">Frequent</ToggleGroupItem>
+                          <ToggleGroupItem value="recent">Recent</ToggleGroupItem>
+                        </ToggleGroup>
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                      {suggestedPrompts.map((prompt, index) => {
+                      {filteredPrompts.map((prompt, index) => {
                         const Icon = prompt.icon;
                         return (
                           <Card 
                             key={index} 
                             className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 ${prompt.color}`}
-                            onClick={() => handleSuggestedPrompt(prompt.text)}
+                            onClick={() => handleSendMessage(prompt)}
                           >
                             <CardContent className="p-5">
                               <div className="flex items-center space-x-2 mb-3">
                                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
                                   <Icon className="w-4 h-4 text-gray-600" />
                                 </div>
-                                <Badge variant="secondary" className="text-xs px-2 py-1">
-                                  {prompt.category}
-                                </Badge>
+                                <Badge variant="secondary" className="text-xs px-2 py-1">{prompt.category}</Badge>
                               </div>
-                              <p className="text-sm text-gray-800 font-medium leading-relaxed text-left">
-                                {prompt.text}
-                              </p>
+                              <p className="text-sm text-gray-800 font-medium leading-relaxed text-left">{prompt.text}</p>
                             </CardContent>
                           </Card>
                         );
@@ -341,35 +340,25 @@ const AIChat = () => {
               <div className="bg-white border-t border-gray-200 p-4">
                 <div className="max-w-5xl mx-auto">
                   <div className="relative">
+                    {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} />}
                     <textarea
+                      ref={inputRef}
                       value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Ask about your campaigns, visitors, or performance metrics..."
+                      onChange={handleInputChange}
+                      onBlur={() => setTimeout(() => setIsCommandMenuOpen(false), 150)}
+                      placeholder="Ask about your campaigns, or type '/' for commands..."
                       className="w-full min-h-[60px] max-h-[200px] px-4 py-3 pr-12 pl-12 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                       onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSendMessage())}
                       rows={2}
                     />
-                    <Popover open={isTimeframeOpen} onOpenChange={setIsTimeframeOpen}>
-                      <PopoverTrigger asChild>
-                        <Button size="icon" variant="ghost" className="absolute left-2 bottom-2 h-8 w-8 p-0 hover:bg-gray-100">
-                          <Clock className="w-4 h-4 text-gray-500" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-32 p-1" align="start" side="top">
-                        {timeframeOptions.map((option) => (
-                          <Button key={option.value} variant="ghost" size="sm" className="w-full justify-start text-sm" onClick={() => handleTimeframeSelect(option.value)}>
-                            {option.label}
-                          </Button>
-                        ))}
-                      </PopoverContent>
-                    </Popover>
-                    <Button size="icon" onClick={handleSendMessage} disabled={!message.trim() || isLoading} className="absolute right-2 bottom-2 h-8 w-8 p-0">
+                    <Button size="icon" variant="ghost" className="absolute left-2 bottom-2 h-8 w-8 p-0 hover:bg-gray-100" onClick={handleSlashClick}>
+                      <Slash className="w-4 h-4 text-gray-500" />
+                    </Button>
+                    <Button size="icon" onClick={() => handleSendMessage()} disabled={!message.trim() || isLoading} className="absolute right-2 bottom-2 h-8 w-8 p-0">
                       <Send className="w-4 h-4" />
                     </Button>
                   </div>
-                  <p className="text-xs text-gray-500 mt-2 text-center">
-                    AI can make mistakes. Verify important information.
-                  </p>
+                  <p className="text-xs text-gray-500 mt-2 text-center">AI can make mistakes. Verify important information.</p>
                 </div>
               </div>
             </div>
