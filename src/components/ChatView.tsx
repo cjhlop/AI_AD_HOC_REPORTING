@@ -9,17 +9,17 @@ import {
   ThumbsDown,
   Copy,
 } from 'lucide-react'
-import { Button } from './ui/button'
-import { Textarea } from './ui/textarea'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from './ui/tooltip'
-import { ChatMessage, type Message } from './ChatMessage'
-import { SlashCommandMenu } from './SlashCommandMenu'
-import { cn } from '../lib/utils'
+} from '@/components/ui/tooltip'
+import { ChatMessage, type Message } from '@/components/ChatMessage'
+import { SlashCommandMenu } from '@/components/SlashCommandMenu'
+import { cn } from '@/lib/utils'
 
 const initialMessages: Message[] = [
   {

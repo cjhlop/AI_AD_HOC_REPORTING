@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { ThumbsUp, ThumbsDown, Copy, Bell } from 'lucide-react'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -10,12 +10,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from './ui/table'
+} from '@/components/ui/table'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from './ui/popover'
+} from '@/components/ui/popover'
 import { RecurringPromptDialog } from './RecurringPromptDialog'
 
 export interface Message {

@@ -8,15 +8,15 @@ import {
   SquareUser,
   Triangle,
 } from 'lucide-react'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from './ui/tooltip'
-import { cn } from '../lib/utils'
-import { Badge } from './ui/badge'
+} from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 
 const chats = [
   { id: 1, name: 'Creative optimization insights', isRecurring: true },
