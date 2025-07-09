@@ -1,141 +1,102 @@
-"use client"
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { 
+  LayoutDashboard, 
+  BarChart3, 
+  Users, 
+  MessageSquare, 
+  Settings, 
+  HelpCircle,
+  ChevronDown,
+  Building2,
+  Target,
+  TrendingUp
+} from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
-import {
-  Bot,
-  Code2,
-  Settings,
-  LifeBuoy,
-  SquareUser,
-  Triangle,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
+const Sidebar = () => {
+  const location = useLocation();
 
-const chats = [
-  { id: 1, name: 'Creative optimization insights', isRecurring: true },
-  { id: 2, name: 'Audience segmentation for new campaign', isRecurring: false },
-  { id: 3, name: 'Weekly performance report', isRecurring: false },
-  { id: 4, name: 'Analyze spend for Q3', isRecurring: false },
-]
+  const navigationItems = [
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/', active: location.pathname === '/' },
+    { icon: BarChart3, label: 'LinkedIn Ads', path: '/linkedin-ads', active: location.pathname === '/linkedin-ads' },
+    { icon: Users, label: 'WebID', path: '/webid', active: location.pathname === '/webid' },
+    { icon: MessageSquare, label: 'AI Co-Pilot', path: '/ai-chat', active: location.pathname === '/ai-chat' },
+    { icon: Target, label: 'Campaigns', path: '/campaigns', active: location.pathname === '/campaigns' },
+    { icon: TrendingUp, label: 'Dashboards', path: '/dashboards', active: location.pathname === '/dashboards' },
+  ];
 
-export function Sidebar() {
+  const bottomItems = [
+    { icon: Settings, label: 'Settings', path: '/settings' },
+    { icon: HelpCircle, label: 'Help & Support', path: '/help' },
+  ];
+
   return (
-    <aside className="inset-y-0 left-0 z-20 flex h-full flex-col border-r">
-      <div className="border-b p-2">
-        <Button variant="outline" size="icon" aria-label="Home">
-          <Triangle className="size-5 fill-foreground" />
-        </Button>
-      </div>
-      <nav className="grid gap-1 p-2">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-lg bg-muted"
-                aria-label="Playground"
-              >
-                <SquareUser className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
-              Playground
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-lg"
-                aria-label="Models"
-              >
-                <Bot className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
-              Models
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-lg"
-                aria-label="API"
-              >
-                <Code2 className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
-              API
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </nav>
-      <div className="flex-1 overflow-y-auto">
-        <div className="px-4 py-2">
-          <h2 className="text-lg font-semibold">Chats</h2>
-          <div className="mt-4 space-y-1">
-            {chats.map(chat => (
-              <a
-                key={chat.id}
-                href="#"
-                className={cn(
-                  'flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md',
-                  'text-gray-700 hover:bg-gray-100'
-                )}
-              >
-                <span className="truncate">{chat.name}</span>
-                {chat.isRecurring && <Badge variant="secondary">Recurring</Badge>}
-              </a>
-            ))}
+    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen fixed left-0 top-0">
+      {/* Logo */}
+      <div className="px-6 border-b border-gray-200 flex items-center h-[69px]">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">DS</span>
           </div>
+          <span className="text-xl font-bold text-gray-900">DemandSense</span>
         </div>
       </div>
-      <nav className="mt-auto grid gap-1 p-2">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="mt-auto rounded-lg"
-                aria-label="Help"
-              >
-                <LifeBuoy className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
-              Help
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="mt-auto rounded-lg"
-                aria-label="Account"
-              >
-                <Settings className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
-              Account
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+
+      {/* Workspace Selector */}
+      <div className="p-4 border-b border-gray-200">
+        <Button variant="outline" className="w-full justify-between">
+          <div className="flex items-center">
+            <Building2 className="w-4 h-4 mr-2" />
+            <span className="text-sm">Acme Corp</span>
+          </div>
+          <ChevronDown className="w-4 h-4" />
+        </Button>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 p-4">
+        <div className="space-y-1">
+          {navigationItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.path} to={item.path}>
+                <Button
+                  variant={item.active ? "secondary" : "ghost"}
+                  className={`w-full justify-start ${
+                    item.active 
+                      ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 mr-3" />
+                  {item.label}
+                </Button>
+              </Link>
+            );
+          })}
+        </div>
       </nav>
-    </aside>
-  )
-}
+
+      {/* Bottom Navigation */}
+      <div className="p-4 border-t border-gray-200">
+        <div className="space-y-1">
+          {bottomItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.path} to={item.path}>
+                <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                  <Icon className="w-4 h-4 mr-3" />
+                  {item.label}
+                </Button>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;
