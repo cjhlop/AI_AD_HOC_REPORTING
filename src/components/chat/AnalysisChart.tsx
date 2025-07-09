@@ -9,7 +9,7 @@ interface AnalysisChartProps {
 
 const AnalysisChart = ({ chartData }: AnalysisChartProps) => {
   return (
-    <Card className="mb-6 dark:bg-gray-800">
+    <Card className="mb-6">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Creative Performance Analysis</CardTitle>
@@ -30,7 +30,7 @@ const AnalysisChart = ({ chartData }: AnalysisChartProps) => {
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData.barData}>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
               <Tooltip

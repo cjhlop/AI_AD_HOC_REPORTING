@@ -9,7 +9,7 @@ interface AnalysisTableProps {
 
 const AnalysisTable = ({ tableData }: AnalysisTableProps) => {
   return (
-    <Card className="mb-6 dark:bg-gray-800">
+    <Card className="mb-6">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Creative Performance Details</CardTitle>
@@ -30,7 +30,7 @@ const AnalysisTable = ({ tableData }: AnalysisTableProps) => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b dark:border-gray-700">
+              <tr className="border-b">
                 <th className="text-left p-2 font-medium">Creative</th>
                 <th className="text-left p-2 font-medium">Impressions</th>
                 <th className="text-left p-2 font-medium">Clicks</th>
@@ -42,7 +42,7 @@ const AnalysisTable = ({ tableData }: AnalysisTableProps) => {
             </thead>
             <tbody>
               {tableData.map((row: any, index: number) => (
-                <tr key={index} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr key={index} className="border-b hover:bg-gray-50">
                   <td className="p-2 font-medium">{row.creative}</td>
                   <td className="p-2">{row.impressions.toLocaleString()}</td>
                   <td className="p-2">{row.clicks.toLocaleString()}</td>

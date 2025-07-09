@@ -10,20 +10,20 @@ interface AnalysisSectionProps {
 
 const variants = {
   default: {
-    bg: 'bg-gray-50 dark:bg-gray-800/50',
-    text: 'text-gray-800 dark:text-gray-300',
+    bg: 'bg-gray-50',
+    text: 'text-gray-800',
   },
   primary: {
-    bg: 'bg-blue-50 dark:bg-blue-900/30',
-    text: 'text-blue-900 dark:text-blue-300',
+    bg: 'bg-blue-50',
+    text: 'text-blue-900',
   },
   success: {
-    bg: 'bg-green-50 dark:bg-green-900/30',
-    text: 'text-green-800 dark:text-green-300',
+    bg: 'bg-green-50',
+    text: 'text-green-800',
   },
   warning: {
-    bg: 'bg-yellow-50 dark:bg-yellow-900/30',
-    text: 'text-yellow-900 dark:text-yellow-300',
+    bg: 'bg-yellow-50',
+    text: 'text-yellow-900',
   },
 };
 
@@ -32,7 +32,7 @@ const AnalysisSection = ({ title, icon, children, variant = 'default' }: Analysi
 
   return (
     <div className="mb-6 space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+      <h3 className="text-lg font-semibold text-gray-900 flex items-center">
         {icon}
         <span className="ml-2">{title}</span>
       </h3>

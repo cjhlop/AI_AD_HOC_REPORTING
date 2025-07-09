@@ -45,14 +45,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   // AI Response
   return (
     <div className="flex justify-start">
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6 max-w-4xl w-full shadow-sm">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 max-w-4xl w-full shadow-sm">
         <div className="flex items-start space-x-3">
-          <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-4 h-4 text-blue-600" />
           </div>
           <div className="flex-1">
-            <div className="prose prose-sm max-w-none mb-6 dark:prose-invert">
-              <p className="text-gray-900 dark:text-gray-200 leading-relaxed">{message.content}</p>
+            <div className="prose prose-sm max-w-none mb-6">
+              <p className="text-gray-900 leading-relaxed">{message.content}</p>
             </div>
 
             {message.insights && <KeyInsights insights={message.insights} />}
@@ -85,7 +85,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
               <p><strong>Expected Outcome:</strong> These optimizations should improve overall campaign efficiency by 20-30%, reduce average CPA to $75-80, and increase monthly conversion volume by 15-20 conversions.</p>
             </AnalysisSection>
 
-            <div className="flex items-center space-x-2 pt-4 border-t border-gray-100 dark:border-gray-800">
+            <div className="flex items-center space-x-2 pt-4 border-t border-gray-100">
               <Button size="sm" variant="outline">
                 <Pin className="w-3 h-3 mr-1" />
                 Pin
