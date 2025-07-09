@@ -33,7 +33,6 @@ const AIChat = () => {
   const [chatHistory, setChatHistory] = React.useState<ChatMessageData[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [promptCategory, setPromptCategory] = React.useState('All');
-  const [promptFilter, setPromptFilter] = React.useState('all');
   const [isCommandMenuOpen, setIsCommandMenuOpen] = React.useState(false);
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
@@ -99,8 +98,7 @@ const AIChat = () => {
   ];
 
   const filteredPrompts = suggestedPrompts
-    .filter(p => promptCategory === 'All' || p.category === promptCategory)
-    .filter(p => promptFilter === 'all' || p.type === promptFilter);
+    .filter(p => promptCategory === 'All' || p.category === promptCategory);
 
   const recentChats = [
     { id: 1, title: "Campaign performance analysis", time: "2 hours ago", pinned: false, isRecurring: false },
@@ -279,11 +277,6 @@ const AIChat = () => {
                           <ToggleGroupItem value="Performance">Performance</ToggleGroupItem>
                           <ToggleGroupItem value="Optimization">Optimization</ToggleGroupItem>
                           <ToggleGroupItem value="Analysis">Analysis</ToggleGroupItem>
-                        </ToggleGroup>
-                        <ToggleGroup type="single" value={promptFilter} onValueChange={(v) => v && setPromptFilter(v)} size="sm">
-                          <ToggleGroupItem value="all">All</ToggleGroupItem>
-                          <ToggleGroupItem value="frequent">Frequent</ToggleGroupItem>
-                          <ToggleGroupItem value="recent">Recent</ToggleGroupItem>
                         </ToggleGroup>
                       </div>
                     </div>
