@@ -49,7 +49,9 @@ const AIChat = () => {
   const modules = [
     { id: 'Auto', label: 'Auto', icon: Sparkles },
     { id: 'LinkedIn Ads', label: 'LinkedIn Ads', icon: BarChart3 },
-    { id: 'WebID', label: 'WebID', icon: Users }
+    { id: 'Website Visitor', label: 'Website Visitor', icon: Users },
+    { id: 'Google Ads', label: 'Google Ads', icon: BarChart3 },
+    { id: 'Meta Ads', label: 'Meta Ads', icon: BarChart3 }
   ];
 
   const suggestedPrompts = [

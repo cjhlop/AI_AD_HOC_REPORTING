@@ -10,7 +10,9 @@ interface Command {
 
 const commands: Command[] = [
   { name: '/dataset LinkedIn Ads', description: 'Insert LinkedIn Ads data', icon: BarChart2 },
-  { name: '/dataset WebID', description: 'Insert WebID visitor data', icon: Users },
+  { name: '/dataset Website Visitor', description: 'Insert Website Visitor data', icon: Users },
+  { name: '/dataset Google Ads', description: 'Insert Google Ads data', icon: BarChart2 },
+  { name: '/dataset Meta Ads', description: 'Insert Meta Ads data', icon: BarChart2 },
   { name: '/metric Impressions', description: 'Insert Impressions metric', icon: Database },
   { name: '/metric CTR', description: 'Insert Click-Through Rate metric', icon: Database },
   { name: '/metric CPA', description: 'Insert Cost Per Acquisition metric', icon: Database },
