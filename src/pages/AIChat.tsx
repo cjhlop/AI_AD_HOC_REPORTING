@@ -194,10 +194,10 @@ const AIChat = () => {
                 </div>
               </div>
               <div>
-                <div className="flex items-center mb-3">
-                  <History className="w-4 h-4 text-gray-500 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Recent</span>
-                </div>
+                <ToggleGroup type="single" defaultValue="most-used" className="grid w-full grid-cols-2 mb-3">
+                  <ToggleGroupItem value="most-used">Most Used</ToggleGroupItem>
+                  <ToggleGroupItem value="recent">Recent</ToggleGroupItem>
+                </ToggleGroup>
                 <div className="space-y-2">
                   {recentChats.filter(chat => !chat.saved).map(chat => (
                     <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
