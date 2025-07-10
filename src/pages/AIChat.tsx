@@ -121,7 +121,22 @@ const AIChat = () => {
     { text: "What's the average time to conversion for a new lead?", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" }
   ];
 
-  const filteredPrompts = suggestedPrompts.filter(p => promptCategory === 'All' || p.category === promptCategory);
+  const filteredPrompts = (() => {
+    if (promptCategory === 'All') {
+      const categories = [
+        "Performance",
+        "Optimization",
+        "Analysis",
+        "Visitors",
+        "Reporting",
+        "Conversion",
+      ];
+      return categories.map(category => 
+        suggestedPrompts.find(prompt => prompt.category === category)
+      ).filter(p => p) as typeof suggestedPrompts;
+    }
+    return suggestedPrompts.filter(p => p.category === promptCategory);
+  })();
   
   const savedChats = [
     { id: 2, title: "Creative optimization insights", time: "Yesterday", saved: true, isRecurring: true },
