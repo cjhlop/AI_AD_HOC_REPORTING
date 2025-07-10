@@ -11,8 +11,10 @@ import { ChatMessage, Message as ChatMessageData } from '@/components/ChatMessag
 import TypingIndicator from '@/components/chat/TypingIndicator';
 import CommandMenu from '@/components/CommandMenu';
 import { ChatInput, ContentPart } from '@/components/chat/ChatInput';
-import { Command } from '@/data/commandData';
+import { Command, datasets } from '@/data/commandData';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import ModuleHoverMenu from '@/components/chat/ModuleHoverMenu';
 import { 
   MessageSquare, 
   Plus, 
@@ -66,11 +68,11 @@ const AIChat = () => {
   }, [chatHistory, isLoading]);
 
   const modules = [
-    { id: 'Auto', label: 'Auto', icon: Sparkles },
-    { id: 'LinkedIn Ads', label: 'LinkedIn Ads', icon: BarChart3 },
-    { id: 'Website Visitor', label: 'Website Visitor', icon: Users },
-    { id: 'Google Ads', label: 'Google Ads', icon: BarChart3 },
-    { id: 'Meta Ads', label: 'Meta Ads', icon: BarChart3 }
+    { id: 'Auto', label: 'Auto', icon: Sparkles, data: null },
+    { id: 'LinkedIn Ads', label: 'LinkedIn Ads', icon: BarChart3, data: datasets.find(d => d.name === 'LinkedIn Ads') || null },
+    { id: 'Website Visitor', label: 'Website Visitor', icon: Users, data: datasets.find(d => d.name === 'Website Visitor') || null },
+    { id: 'Google Ads', label: 'Google Ads', icon: BarChart3, data: datasets.find(d => d.name === 'Google Ads') || null },
+    { id: 'Meta Ads', label: 'Meta Ads', icon: BarChart3, data: datasets.find(d => d.name === 'Meta Ads') || null }
   ];
 
   const suggestedPrompts = [
@@ -316,12 +318,33 @@ const AIChat = () => {
               <div className="flex items-center space-x-2">
                 {modules.map(module => {
                   const Icon = module.icon;
-                  return (
-                    <Badge key={module.id} variant={selectedModule === module.id ? "default" : "outline"} className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-100' }`} onClick={() => setSelectedModule(module.id)}>
+                  const hasSubMenu = module.data && module.data.children && module.data.children.length > 0;
+
+                  const badge = (
+                    <Badge 
+                      variant={selectedModule === module.id ? "default" : "outline"} 
+                      className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-100' }`} 
+                      onClick={() => setSelectedModule(module.id)}
+                    >
                       <Icon className="w-3 h-3 mr-1" />
                       {module.label}
                     </Badge>
                   );
+
+                  if (hasSubMenu) {
+                    return (
+                      <HoverCard key={module.id} openDelay={100} closeDelay={100}>
+                        <HoverCardTrigger asChild>
+                          {badge}
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-56 p-0" align="start">
+                          <ModuleHoverMenu items={module.data.children!} />
+                        </HoverCardContent>
+                      </HoverCard>
+                    );
+                  }
+
+                  return <div key={module.id}>{badge}</div>;
                 })}
               </div>
             </div>
