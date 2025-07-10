@@ -35,13 +35,23 @@ const AIChat = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [promptCategory, setPromptCategory] = React.useState('All');
   const [isCommandMenuOpen, setIsCommandMenuOpen] = React.useState(false);
+  const [commandQuery, setCommandQuery] = React.useState('');
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const textValue = content.find(p => p.type === 'text')?.value || '';
 
   React.useEffect(() => {
-    setIsCommandMenuOpen(textValue.startsWith('/'));
+    const triggerRegex = /(^|\s)\/(\S*)$/;
+    const match = textValue.match(triggerRegex);
+    
+    if (match) {
+      setIsCommandMenuOpen(true);
+      setCommandQuery(match[2] || '');
+    } else {
+      setIsCommandMenuOpen(false);
+      setCommandQuery('');
+    }
   }, [textValue]);
 
   React.useEffect(() => {
@@ -116,8 +126,18 @@ const AIChat = () => {
       color: command.color,
     };
     
+    const textPart = content.find(p => p.type === 'text');
+    if (!textPart) return;
+
+    const newTextValue = textPart.value.replace(/\/\S*$/, '');
     const chipContent = content.filter(p => p.type === 'chip');
-    setContent([...chipContent, newChip, { id: 'text', type: 'text', value: ' ' }]);
+    
+    setContent([
+      ...chipContent, 
+      newChip, 
+      { id: 'text', type: 'text', value: newTextValue.trim() + ' ' }
+    ]);
+
     setIsCommandMenuOpen(false);
     setTimeout(() => inputRef.current?.focus(), 0);
   };
@@ -254,7 +274,7 @@ const AIChat = () => {
               <div className="bg-white border-t border-gray-200 p-4">
                 <div className="max-w-5xl mx-auto">
                   <div className="relative">
-                    {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} />}
+                    {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} query={commandQuery} />}
                     <div className="relative">
                       <ChatInput
                         ref={inputRef}

@@ -6,9 +6,10 @@ import { ChevronRight, ArrowLeft } from 'lucide-react';
 
 interface CommandMenuProps {
   onSelect: (command: Command) => void;
+  query: string;
 }
 
-const CommandMenu = ({ onSelect }: CommandMenuProps) => {
+const CommandMenu = ({ onSelect, query }: CommandMenuProps) => {
   const [path, setPath] = useState<string[]>([]);
   const [currentItems, setCurrentItems] = useState<Command[]>([]);
   const [currentTitle, setCurrentTitle] = useState('Commands');
@@ -34,6 +35,13 @@ const CommandMenu = ({ onSelect }: CommandMenuProps) => {
 
   const goBack = () => {
     setPath(path.slice(0, -1));
+  };
+
+  const filterItems = (items: Command[]): Command[] => {
+    if (!query) return items;
+    return items.filter(item => 
+      item.name.toLowerCase().includes(query.toLowerCase())
+    );
   };
 
   const renderItem = (item: Command) => {
@@ -83,12 +91,12 @@ const CommandMenu = ({ onSelect }: CommandMenuProps) => {
           {path.length === 0 ? (
             <>
               <p className="text-xs font-semibold text-gray-500 px-2 py-1 mt-1">Datasets</p>
-              {datasets.map(renderItem)}
+              {filterItems(datasets).map(renderItem)}
               <p className="text-xs font-semibold text-gray-500 px-2 py-1 mt-2">Metrics</p>
-              {metrics.map(renderItem)}
+              {filterItems(metrics).map(renderItem)}
             </>
           ) : (
-            currentItems.map(renderItem)
+            filterItems(currentItems).map(renderItem)
           )}
         </div>
       </CardContent>

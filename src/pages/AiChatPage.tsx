@@ -32,6 +32,7 @@ export const AiChatPage = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [promptCategory, setPromptCategory] = React.useState('All');
   const [isCommandMenuOpen, setIsCommandMenuOpen] = React.useState(false);
+  const [commandQuery, setCommandQuery] = React.useState('');
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -43,6 +44,19 @@ export const AiChatPage = () => {
       });
     }
   }, [chatHistory, isLoading]);
+
+  React.useEffect(() => {
+    const triggerRegex = /(^|\s)\/(\S*)$/;
+    const match = message.match(triggerRegex);
+    
+    if (match) {
+      setIsCommandMenuOpen(true);
+      setCommandQuery(match[2] || '');
+    } else {
+      setIsCommandMenuOpen(false);
+      setCommandQuery('');
+    }
+  }, [message]);
 
   const modules = [
     { id: 'Auto', label: 'Auto', icon: Sparkles },
@@ -149,11 +163,11 @@ export const AiChatPage = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setMessage(value);
-    setIsCommandMenuOpen(value.startsWith('/'));
   };
 
   const handleCommandSelect = (command: Command) => {
-    setMessage(command.name + ' ');
+    const newTextValue = message.replace(/\/\S*$/, command.name + ' ');
+    setMessage(newTextValue);
     setIsCommandMenuOpen(false);
     inputRef.current?.focus();
   };
@@ -308,7 +322,7 @@ export const AiChatPage = () => {
           <div className="bg-white border-t border-gray-200 p-4">
             <div className="max-w-5xl mx-auto">
               <div className="relative">
-                {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} />}
+                {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} query={commandQuery} />}
                 <textarea
                   ref={inputRef}
                   value={message}
