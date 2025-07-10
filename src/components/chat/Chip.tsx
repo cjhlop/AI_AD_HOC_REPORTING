@@ -21,7 +21,7 @@ export const Chip = ({ label, color = 'gray', onRemove }: ChipProps) => {
     <Badge
       variant="outline"
       className={cn(
-        'inline-flex items-center gap-x-1 rounded-md px-2 py-1 text-sm font-medium mr-1 my-0.5 whitespace-nowrap',
+        'inline-flex items-center gap-x-1 rounded-md px-2 py-1 text-sm font-medium mr-1 whitespace-nowrap',
         colorClasses[color]
       )}
     >
