@@ -28,14 +28,12 @@ export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newText = e.target.value;
       if (editablePart) {
-        // If there's an existing text part at the end, update it
         const newContent = [...readOnlyParts];
         if (newText) {
           newContent.push({ ...editablePart, value: newText });
         }
         setContent(newContent);
       } else {
-        // If the last part is a chip, add a new text part
         if (newText) {
           setContent([...content, { id: `text-${Date.now()}`, type: 'text', value: newText }]);
         }
@@ -50,7 +48,6 @@ export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
         }
       } else if (e.key === 'Backspace' && (e.target as HTMLTextAreaElement).value === '' && readOnlyParts.length > 0) {
         e.preventDefault();
-        // Remove the last chip or text block
         setContent(readOnlyParts.slice(0, -1));
       }
     };
@@ -72,32 +69,37 @@ export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
         <Button size="icon" variant="ghost" className="h-9 w-9 flex-shrink-0 text-gray-500 hover:text-gray-700">
             <Paperclip className="w-5 h-5" />
         </Button>
-        <div className="flex-grow flex flex-wrap items-baseline px-2">
-            {readOnlyParts.map(part =>
-              part.type === 'chip' ? (
-                <Chip
-                  key={part.id}
-                  label={part.value}
-                  color={part.color}
-                  onRemove={() => {
-                    const newContent = content.filter(p => p.id !== part.id);
-                    setContent(newContent);
-                  }}
-                />
-              ) : (
-                <span key={part.id} className="p-1 whitespace-pre-wrap">{part.value}</span>
-              )
-            )}
-            <textarea
-              ref={ref}
-              value={editablePart?.value || ''}
-              onChange={handleTextChange}
-              onKeyDown={handleKeyDown}
-              placeholder={content.length === 0 ? placeholder : ''}
-              className="flex-grow bg-transparent outline-none p-1 min-w-[100px] resize-none overflow-y-hidden"
-              rows={1}
-              disabled={isLoading}
-            />
+        <div className="flex-grow px-2 w-full">
+          <div className="w-full min-h-[24px]">
+            {readOnlyParts.map(part => (
+              <div key={part.id} className="float-left mr-1 mb-1">
+                {part.type === 'chip' ? (
+                  <Chip
+                    label={part.value}
+                    color={part.color}
+                    onRemove={() => {
+                      const newContent = content.filter(p => p.id !== part.id);
+                      setContent(newContent);
+                    }}
+                  />
+                ) : (
+                  <span className="p-1 leading-tight">{part.value}</span>
+                )}
+              </div>
+            ))}
+            <div className="overflow-hidden">
+              <textarea
+                ref={ref}
+                value={editablePart?.value || ''}
+                onChange={handleTextChange}
+                onKeyDown={handleKeyDown}
+                placeholder={content.length === 0 ? placeholder : ''}
+                className="w-full bg-transparent outline-none p-1 resize-none overflow-y-hidden leading-tight"
+                rows={1}
+                disabled={isLoading}
+              />
+            </div>
+          </div>
         </div>
         <Button size="icon" onClick={onSendMessage} disabled={content.length === 0 || isLoading} className="h-9 w-9 flex-shrink-0">
           <Send className="w-4 h-4" />
