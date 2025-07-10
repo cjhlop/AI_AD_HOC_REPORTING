@@ -331,9 +331,6 @@ const AIChat = () => {
                       onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSendMessage())}
                       rows={2}
                     />
-                    <Button size="icon" variant="ghost" className="absolute left-2 bottom-2 h-8 w-8 p-0 hover:bg-gray-100" onClick={handleSlashClick}>
-                      <Slash className="w-4 h-4 text-gray-500" />
-                    </Button>
                     <Button size="icon" onClick={() => handleSendMessage()} disabled={!message.trim() || isLoading} className="absolute right-2 bottom-2 h-8 w-8 p-0">
                       <Send className="w-4 h-4" />
                     </Button>
