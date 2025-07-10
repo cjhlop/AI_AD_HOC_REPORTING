@@ -91,7 +91,7 @@ const AIChat = () => {
     chartData: { barData: [ { name: 'Creative A', ctr: 3.2, conversions: 45 }, { name: 'Creative B', ctr: 2.1, conversions: 28 }, { name: 'Creative C', ctr: 1.4, conversions: 12 }, { name: 'Creative D', ctr: 2.8, conversions: 35 }, { name: 'Creative E', ctr: 1.9, conversions: 18 } ] },
     tableData: [ { creative: 'Creative A - "Transform Your Business"', impressions: 45230, clicks: 1447, ctr: 3.2, conversions: 45, cpa: 67, status: 'Top Performer' }, { creative: 'Creative B - "Unlock Growth Potential"', impressions: 38940, clicks: 818, ctr: 2.1, conversions: 28, cpa: 89, status: 'Good' }, { creative: 'Creative C - "Scale Your Operations"', impressions: 52100, clicks: 729, ctr: 1.4, conversions: 12, cpa: 156, status: 'Underperforming' }, { creative: 'Creative D - "Drive Results Fast"', impressions: 41200, clicks: 1154, ctr: 2.8, conversions: 35, cpa: 78, status: 'Good' }, { creative: 'Creative E - "Boost Efficiency"', impressions: 36800, clicks: 699, ctr: 1.9, conversions: 18, cpa: 112, status: 'Average' } ],
     insights: [ { label: 'Best Performing Creative', value: 'Creative A', trend: 'up', change: '+65% conversion rate' }, { label: 'Lowest CPA', value: '$67', trend: 'up', change: '23% below target' }, { label: 'Total Conversions', value: '138', trend: 'up', change: '+12% vs last week' } ]
-  };
+  } as const;
 
   const handleSendMessage = (prompt?: { text: string, icon: React.ElementType }) => {
     const messageToSend = prompt ? prompt.text : content.map(p => p.value).join(' ').trim();
