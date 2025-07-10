@@ -320,7 +320,7 @@ const AIChat = () => {
                   const Icon = module.icon;
                   const hasSubMenu = module.data && module.data.children && module.data.children.length > 0;
 
-                  const badge = (
+                  const badgeElement = (
                     <Badge 
                       variant={selectedModule === module.id ? "default" : "outline"} 
                       className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-100' }`} 
@@ -335,7 +335,7 @@ const AIChat = () => {
                     return (
                       <HoverCard key={module.id} openDelay={100} closeDelay={100}>
                         <HoverCardTrigger asChild>
-                          {badge}
+                          <span>{badgeElement}</span>
                         </HoverCardTrigger>
                         <HoverCardContent className="w-56 p-0" align="start">
                           <ModuleHoverMenu items={module.data.children!} />
@@ -344,7 +344,7 @@ const AIChat = () => {
                     );
                   }
 
-                  return <div key={module.id}>{badge}</div>;
+                  return badgeElement;
                 })}
               </div>
             </div>
