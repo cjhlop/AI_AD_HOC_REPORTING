@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -12,8 +12,13 @@ import {
 } from 'lucide-react';
 
 const Sidebar = () => {
+  const location = useLocation();
+
   const navItems = [
-    { name: 'AI Co-Pilot', path: '/', icon: MessageSquare, active: true },
+    { name: 'AI Co-Pilot', path: '/', icon: MessageSquare },
+    { name: 'Dashboards', path: '/dashboards', icon: LayoutDashboard },
+    { name: 'Reports', path: '/reports', icon: BarChart3 },
+    { name: 'Audiences', path: '/audiences', icon: Users },
   ];
 
   return (
@@ -25,21 +30,24 @@ const Sidebar = () => {
         </div>
       </div>
       <nav className="flex-1 p-4 space-y-2">
-        {navItems.map((item) => (
-          <Link key={item.path} to={item.path}>
-            <Button
-              variant={item.active ? "secondary" : "ghost"}
-              className={`w-full justify-start ${
-                item.active 
-                  ? "bg-blue-50 text-blue-700 hover:bg-blue-100" 
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-            >
-              <item.icon className="mr-3 w-5 h-5" />
-              {item.name}
-            </Button>
-          </Link>
-        ))}
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link key={item.path} to={item.path}>
+              <Button
+                variant={isActive ? "secondary" : "ghost"}
+                className={`w-full justify-start ${
+                  isActive 
+                    ? "bg-blue-50 text-blue-700 hover:bg-blue-100" 
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                }`}
+              >
+                <item.icon className="mr-3 w-5 h-5" />
+                {item.name}
+              </Button>
+            </Link>
+          );
+        })}
       </nav>
       <div className="p-4 border-t border-gray-200">
         <div className="space-y-2">
