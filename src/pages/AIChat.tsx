@@ -16,7 +16,7 @@ import {
   MessageSquare, 
   Plus, 
   Search, 
-  Pin, 
+  Bookmark, 
   Sparkles,
   BarChart3,
   Users,
@@ -81,10 +81,10 @@ const AIChat = () => {
 
   const filteredPrompts = suggestedPrompts.filter(p => promptCategory === 'All' || p.category === promptCategory);
   const recentChats = [
-    { id: 1, title: "Campaign performance analysis", time: "2 hours ago", pinned: false, isRecurring: false },
-    { id: 2, title: "Creative optimization insights", time: "Yesterday", pinned: true, icon: Target, isRecurring: true },
-    { id: 3, title: "Visitor behavior patterns", time: "2 days ago", pinned: false, isRecurring: false },
-    { id: 4, title: "CPC trend analysis", time: "3 days ago", pinned: true, icon: BarChart3, isRecurring: false },
+    { id: 1, title: "Campaign performance analysis", time: "2 hours ago", saved: false, isRecurring: false },
+    { id: 2, title: "Creative optimization insights", time: "Yesterday", saved: true, icon: Target, isRecurring: true },
+    { id: 3, title: "Visitor behavior patterns", time: "2 days ago", saved: false, isRecurring: false },
+    { id: 4, title: "CPC trend analysis", time: "3 days ago", saved: true, icon: BarChart3, isRecurring: false },
   ];
   const sampleCreativeData = {
     chartData: { barData: [ { name: 'Creative A', ctr: 3.2, conversions: 45 }, { name: 'Creative B', ctr: 2.1, conversions: 28 }, { name: 'Creative C', ctr: 1.4, conversions: 12 }, { name: 'Creative D', ctr: 2.8, conversions: 35 }, { name: 'Creative E', ctr: 1.9, conversions: 18 } ] },
@@ -178,11 +178,11 @@ const AIChat = () => {
             <ScrollArea className="flex-1 p-4">
               <div className="mb-6">
                 <div className="flex items-center mb-3">
-                  <Pin className="w-4 h-4 text-gray-500 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Pinned</span>
+                  <Bookmark className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">Saved</span>
                 </div>
                 <div className="space-y-2">
-                  {recentChats.filter(chat => chat.pinned).map(chat => (
+                  {recentChats.filter(chat => chat.saved).map(chat => (
                     <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer border border-gray-100" onClick={() => chat.title === "Creative optimization insights" && loadCreativeOptimizationChat()}>
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
@@ -199,7 +199,7 @@ const AIChat = () => {
                   <span className="text-sm font-medium text-gray-700">Recent</span>
                 </div>
                 <div className="space-y-2">
-                  {recentChats.filter(chat => !chat.pinned).map(chat => (
+                  {recentChats.filter(chat => !chat.saved).map(chat => (
                     <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
                       <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
                       <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
