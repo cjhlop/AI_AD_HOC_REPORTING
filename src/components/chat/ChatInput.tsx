@@ -14,8 +14,10 @@ interface ChatInputProps {
   isLoading: boolean;
 }
 
+type InputSegment = { type: 'text'; content: string } | { type: 'chip'; content: string; data: any };
+
 const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(({ onSendMessage, isLoading }, ref) => {
-  const [value, setValue] = useState<Array<{ type: 'text'; content: string } | { type: 'chip'; content: string; data: any }>>([{ type: 'text', content: '' }]);
+  const [value, setValue] = useState<Array<InputSegment>>([{ type: 'text', content: '' }]);
   const [commandMenuOpen, setCommandMenuOpen] = useState(false);
   const [commandQuery, setCommandQuery] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,12 +34,10 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(({ onSendMessage, 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    
     const newCommandQueryMatch = /(?:^|\s)\/(\w*)$/.exec(inputValue);
 
     if (newCommandQueryMatch) {
-      const query = newCommandQueryMatch[1];
-      setCommandQuery(query);
+      setCommandQuery(newCommandQueryMatch[1]);
       setCommandMenuOpen(true);
     } else {
       setCommandMenuOpen(false);
@@ -56,7 +56,7 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(({ onSendMessage, 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !commandMenuOpen) {
       e.preventDefault();
-      const message = value.map(v => v.content).join('');
+      const message = value.map(v => v.type === 'text' ? v.content : `[${v.content}]`).join('');
       const data = value.filter(v => v.type === 'chip').map(v => v.data);
       if (message.trim() || data.length > 0) {
         onSendMessage(message, data.length > 0 ? data : undefined);
@@ -72,15 +72,22 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(({ onSendMessage, 
     }
   };
 
-  const handleSelectCommand = (command: any, item: any) => {
-    const textBeforeCommand = (value.find(v => v.type === 'text')?.content || '').replace(/\/\w*$/, '');
-    
-    const newSegments = [
+  const handleSelectCommand = (command: { name: string }) => {
+    const lastSegment = value[value.length - 1];
+    if (lastSegment.type !== 'text') return;
+
+    const textBeforeCommand = lastSegment.content.replace(/\/\w*$/, '');
+
+    const newSegments: InputSegment[] = [
       ...value.slice(0, -1),
-      { type: 'text' as const, content: textBeforeCommand.trimEnd() + ' ' },
-      { type: 'chip' as const, content: item.label, data: item },
-      { type: 'text' as const, content: ' ' }
     ];
+
+    if (textBeforeCommand.trim()) {
+      newSegments.push({ type: 'text', content: textBeforeCommand.trimEnd() });
+    }
+
+    newSegments.push({ type: 'chip', content: command.name, data: { type: 'command', name: command.name } });
+    newSegments.push({ type: 'text', content: ' ' });
 
     setValue(newSegments);
     setCommandMenuOpen(false);
@@ -93,7 +100,6 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(({ onSendMessage, 
       if (item.type === 'chip') {
         return <Chip key={index} label={item.content} onRemove={() => {
           const newValue = [...value.slice(0, index), ...value.slice(index + 1)];
-          // merge text segments if they are adjacent after removing a chip
           for (let i = 0; i < newValue.length - 1; i++) {
             if (newValue[i].type === 'text' && newValue[i+1].type === 'text') {
               newValue[i].content += newValue[i+1].content;
@@ -104,7 +110,7 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(({ onSendMessage, 
           setValue(newValue.length > 0 ? newValue : [{ type: 'text', content: '' }]);
         }} />;
       }
-      return null; // text is handled by the input
+      return null;
     });
   };
 
@@ -120,7 +126,7 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(({ onSendMessage, 
               {commands
                 .filter(c => c.name.toLowerCase().includes(commandQuery.toLowerCase()))
                 .map(command => (
-                  <CommandItem key={command.name} onSelect={() => handleSelectCommand(command, { type: command.name, label: command.name })}>
+                  <CommandItem key={command.name} onSelect={() => handleSelectCommand(command)}>
                     {command.name}
                   </CommandItem>
                 ))}
