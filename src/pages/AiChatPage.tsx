@@ -207,7 +207,7 @@ export const AiChatPage = () => {
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
-                    {chat.isRecurring && <Badge variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200">Recurring</Badge>}
+                    {chat.isRecurring && <Badge variant="outline" className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-transparent">Recurring</Badge>}
                   </div>
                   <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
                 </div>
