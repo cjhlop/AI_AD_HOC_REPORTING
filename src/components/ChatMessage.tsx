@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from 'react'
-import { ThumbsUp, ThumbsDown, Copy, Bell } from 'lucide-react'
+import { ThumbsUp, ThumbsDown, Copy, Bell, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Popover,
@@ -40,7 +40,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
     return (
       <>
         <div className="flex items-start justify-end gap-2">
-          <div className="flex-shrink-0 order-2">
+          {/* Bell icon on the left of the bubble */}
+          <div className="flex-shrink-0 self-center">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -79,8 +80,15 @@ export function ChatMessage({ message }: ChatMessageProps) {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="bg-blue-600 text-white rounded-lg px-4 py-2 max-w-2xl order-1">
+
+          {/* Message bubble in the middle */}
+          <div className="bg-blue-600 text-white rounded-lg px-4 py-2 max-w-2xl">
             <p className="text-sm leading-relaxed">{message.content}</p>
+          </div>
+
+          {/* "Me" icon on the right */}
+          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+            <User className="w-4 h-4 text-blue-700" />
           </div>
         </div>
         <RecurringPromptDialog
