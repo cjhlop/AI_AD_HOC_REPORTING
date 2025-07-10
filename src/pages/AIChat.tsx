@@ -72,12 +72,53 @@ const AIChat = () => {
   ];
 
   const suggestedPrompts = [
+    // Performance
     { text: "Show me top performing campaigns this month", icon: TrendingUp, category: "Performance", color: "bg-green-50 border-green-200 hover:bg-green-100" },
+    { text: "What are my best performing ad groups by CTR?", icon: TrendingUp, category: "Performance", color: "bg-green-50 border-green-200 hover:bg-green-100" },
+    { text: "Which campaigns have the highest conversion rate?", icon: TrendingUp, category: "Performance", color: "bg-green-50 border-green-200 hover:bg-green-100" },
+    { text: "Identify the top 5 keywords by performance.", icon: TrendingUp, category: "Performance", color: "bg-green-50 border-green-200 hover:bg-green-100" },
+    { text: "What's the overall ROAS for my Q3 campaigns?", icon: TrendingUp, category: "Performance", color: "bg-green-50 border-green-200 hover:bg-green-100" },
+    { text: "Show me performance metrics for the new product launch campaign.", icon: TrendingUp, category: "Performance", color: "bg-green-50 border-green-200 hover:bg-green-100" },
+    
+    // Optimization
     { text: "Which creative drove 80% of MQLs?", icon: Target, category: "Optimization", color: "bg-blue-50 border-blue-200 hover:bg-blue-100" },
+    { text: "Suggest budget re-allocation for underperforming campaigns.", icon: Target, category: "Optimization", color: "bg-blue-50 border-blue-200 hover:bg-blue-100" },
+    { text: "What are some negative keywords I should add based on search terms?", icon: Target, category: "Optimization", color: "bg-blue-50 border-blue-200 hover:bg-blue-100" },
+    { text: "Identify ads with high impressions but low clicks for optimization.", icon: Target, category: "Optimization", color: "bg-blue-50 border-blue-200 hover:bg-blue-100" },
+    { text: "Which landing pages have the lowest conversion rates?", icon: Target, category: "Optimization", color: "bg-blue-50 border-blue-200 hover:bg-blue-100" },
+    { text: "Give me A/B test ideas for my lowest performing ad set.", icon: Target, category: "Optimization", color: "bg-blue-50 border-blue-200 hover:bg-blue-100" },
+
+    // Analysis
     { text: "Compare CPC trends vs last quarter", icon: BarChart3, category: "Analysis", color: "bg-purple-50 border-purple-200 hover:bg-purple-100" },
+    { text: "Analyze the demographic performance of my main campaign.", icon: BarChart3, category: "Analysis", color: "bg-purple-50 border-purple-200 hover:bg-purple-100" },
+    { text: "What's the correlation between ad spend and lead quality?", icon: BarChart3, category: "Analysis", color: "bg-purple-50 border-purple-200 hover:bg-purple-100" },
+    { text: "Show me a cohort analysis of users acquired last month.", icon: BarChart3, category: "Analysis", color: "bg-purple-50 border-purple-200 hover:bg-purple-100" },
+    { text: "Break down campaign performance by device type.", icon: BarChart3, category: "Analysis", color: "bg-purple-50 border-purple-200 hover:bg-purple-100" },
+    { text: "What time of day are my ads most effective?", icon: BarChart3, category: "Analysis", color: "bg-purple-50 border-purple-200 hover:bg-purple-100" },
+
+    // Visitors
     { text: "Show US-based SaaS visitors from pricing page", icon: Eye, category: "Visitors", color: "bg-orange-50 border-orange-200 hover:bg-orange-100" },
+    { text: "List all enterprise companies that visited our site this week.", icon: Eye, category: "Visitors", color: "bg-orange-50 border-orange-200 hover:bg-orange-100" },
+    { text: "What are the most common industries of our website visitors?", icon: Eye, category: "Visitors", color: "bg-orange-50 border-orange-200 hover:bg-orange-100" },
+    { text: "Identify returning visitors from target accounts who haven't converted.", icon: Eye, category: "Visitors", color: "bg-orange-50 border-orange-200 hover:bg-orange-100" },
+    { text: "Show me the user journey for visitors who came from LinkedIn Ads.", icon: Eye, category: "Visitors", color: "bg-orange-50 border-orange-200 hover:bg-orange-100" },
+    { text: "Which blog posts are most popular among visitors from the tech industry?", icon: Eye, category: "Visitors", color: "bg-orange-50 border-orange-200 hover:bg-orange-100" },
+
+    // Reporting
     { text: "Weekly performance breakdown by campaign", icon: Calendar, category: "Reporting", color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100" },
-    { text: "Visitor conversion funnel analysis", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" }
+    { text: "Generate a monthly report of all key metrics for the marketing team.", icon: Calendar, category: "Reporting", color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100" },
+    { text: "Create a summary of Q3 performance for the executive team.", icon: Calendar, category: "Reporting", color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100" },
+    { text: "Export a CSV of all campaign data from the last 30 days.", icon: Calendar, category: "Reporting", color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100" },
+    { text: "Build a dashboard comparing LinkedIn and Google Ads performance.", icon: Calendar, category: "Reporting", color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100" },
+    { text: "Show me a report of year-over-year growth.", icon: Calendar, category: "Reporting", color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100" },
+
+    // Conversion
+    { text: "Visitor conversion funnel analysis", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" },
+    { text: "What are the top conversion paths on our website?", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" },
+    { text: "Identify the biggest drop-off points in the conversion funnel.", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" },
+    { text: "Which traffic source has the highest lead-to-customer conversion rate?", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" },
+    { text: "Analyze the conversion rate of visitors from different countries.", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" },
+    { text: "What's the average time to conversion for a new lead?", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" }
   ];
 
   const filteredPrompts = suggestedPrompts.filter(p => promptCategory === 'All' || p.category === promptCategory);
@@ -95,7 +136,7 @@ const AIChat = () => {
   const recentUnsavedChats = [
     { id: 5, title: "Visitor conversion funnel analysis", time: "4 days ago" },
     { id: 6, title: "Show US-based SaaS visitors from pricing page", time: "5 days ago" },
-    { id: 7, title: "Weekly performance breakdown by campaign", time: "6 days ago" },
+    { id: 7, "title": "Weekly performance breakdown by campaign", time: "6 days ago" },
   ];
 
   const sampleCreativeData = {
