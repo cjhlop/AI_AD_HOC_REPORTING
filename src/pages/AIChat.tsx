@@ -17,7 +17,6 @@ import {
   Plus, 
   Search, 
   Pin, 
-  Send,
   Sparkles,
   BarChart3,
   Users,
@@ -37,7 +36,7 @@ const AIChat = () => {
   const [isCommandMenuOpen, setIsCommandMenuOpen] = React.useState(false);
   const [commandQuery, setCommandQuery] = React.useState('');
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
   const textValue = content.find(p => p.type === 'text')?.value || '';
 
@@ -93,11 +92,11 @@ const AIChat = () => {
     insights: [ { label: 'Best Performing Creative', value: 'Creative A', trend: 'up', change: '+65% conversion rate' }, { label: 'Lowest CPA', value: '$67', trend: 'up', change: '23% below target' }, { label: 'Total Conversions', value: '138', trend: 'up', change: '+12% vs last week' } ]
   };
 
-  const handleSendMessage = (prompt?: { text: string, icon: React.ElementType }) => {
-    const messageToSend = prompt ? prompt.text : content.map(p => p.value).join(' ').trim();
+  const handleSendMessage = (promptText?: string) => {
+    const messageToSend = promptText ?? content.map(p => p.value).join(' ').trim();
     if (!messageToSend) return;
     
-    const newMessage: ChatMessageData = { id: Date.now(), role: 'user', content: messageToSend, icon: prompt?.icon };
+    const newMessage: ChatMessageData = { id: Date.now(), role: 'user', content: messageToSend };
     setChatHistory(prev => [...prev, newMessage]);
     setIsLoading(true);
     setContent([]);
@@ -143,7 +142,7 @@ const AIChat = () => {
   };
 
   const loadCreativeOptimizationChat = () => {
-    const userMessage: ChatMessageData = { id: Date.now(), role: 'user', content: "Show me creative optimization insights for my LinkedIn campaigns", icon: Target };
+    const userMessage: ChatMessageData = { id: Date.now(), role: 'user', content: "Show me creative optimization insights for my LinkedIn campaigns" };
     const aiResponse: ChatMessageData = {
       id: Date.now() + 1,
       role: 'assistant',
@@ -166,7 +165,7 @@ const AIChat = () => {
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-gray-900">AI Co-Pilot</h2>
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => setChatHistory([])}>
                   <Plus className="w-4 h-4 mr-2" />
                   New Chat
                 </Button>
@@ -247,7 +246,7 @@ const AIChat = () => {
                       {filteredPrompts.map((prompt, index) => {
                         const Icon = prompt.icon;
                         return (
-                          <Card key={index} className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 ${prompt.color}`} onClick={() => handleSendMessage(prompt)}>
+                          <Card key={index} className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 ${prompt.color}`} onClick={() => handleSendMessage(prompt.text)}>
                             <CardContent className="p-5">
                               <div className="flex items-center space-x-2 mb-3">
                                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
@@ -281,11 +280,9 @@ const AIChat = () => {
                         content={content}
                         setContent={setContent}
                         placeholder="Ask about your campaigns, or type '/' for commands..."
-                        onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSendMessage())}
+                        onSendMessage={() => handleSendMessage()}
+                        isLoading={isLoading}
                       />
-                      <Button size="icon" onClick={() => handleSendMessage()} disabled={content.length === 0 || isLoading} className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0">
-                        <Send className="w-4 h-4" />
-                      </Button>
                     </div>
                   </div>
                   <p className="text-xs text-gray-500 mt-2 text-center">AI can make mistakes. Verify important information.</p>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Chip } from './Chip';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Send, Paperclip } from 'lucide-react';
 
 export interface ContentPart {
   id: string;
@@ -13,61 +14,88 @@ interface ChatInputProps {
   content: ContentPart[];
   setContent: (content: ContentPart[]) => void;
   placeholder: string;
-  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onSendMessage: () => void;
+  isLoading: boolean;
 }
 
-export const ChatInput = React.forwardRef<HTMLInputElement, ChatInputProps>(
-  ({ content, setContent, placeholder, onKeyDown }, ref) => {
+export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
+  ({ content, setContent, placeholder, onSendMessage, isLoading }, ref) => {
     const containerRef = React.useRef<HTMLDivElement>(null);
     const textInput = content.find(p => p.type === 'text');
 
-    const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newText = e.target.value;
       const otherParts = content.filter(p => p.type === 'chip');
-      if (newText) {
+      if (newText || otherParts.length > 0) {
         setContent([...otherParts, { id: 'text', type: 'text', value: newText }]);
       } else {
-        setContent(otherParts);
+        setContent([]);
       }
     };
 
-    const handleLocalKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Backspace' && e.currentTarget.value === '' && content.some(p => p.type === 'chip')) {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        const otherParts = content.filter(p => p.type === 'chip');
-        setContent(otherParts.slice(0, -1));
+        if (!isLoading) {
+          onSendMessage();
+        }
+      } else if (e.key === 'Backspace' && (e.target as HTMLTextAreaElement).value === '' && content.some(p => p.type === 'chip')) {
+        e.preventDefault();
+        const chipParts = content.filter(p => p.type === 'chip');
+        const textPart = content.find(p => p.type === 'text');
+        const newContent = chipParts.slice(0, -1);
+        if (textPart) {
+          newContent.push(textPart);
+        }
+        setContent(newContent);
       }
-      onKeyDown(e);
     };
+    
+    React.useEffect(() => {
+        const textarea = (ref as React.RefObject<HTMLTextAreaElement>)?.current;
+        if (textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+    }, [textInput?.value, ref]);
 
     return (
       <div
         ref={containerRef}
-        className="flex flex-wrap items-center w-full min-h-[60px] max-h-[200px] px-3 py-1.5 border border-gray-300 rounded-lg focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent bg-white text-gray-900 overflow-y-auto"
-        onClick={() => (ref as React.RefObject<HTMLInputElement>).current?.focus()}
+        className="flex items-start w-full p-2 border border-gray-300 rounded-lg focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent bg-white text-gray-900"
+        onClick={() => (ref as React.RefObject<HTMLTextAreaElement>).current?.focus()}
       >
-        {content.map(part =>
-          part.type === 'chip' ? (
-            <Chip
-              key={part.id}
-              label={part.value}
-              color={part.color}
-              onRemove={() => {
-                const newContent = content.filter(p => p.id !== part.id);
-                setContent(newContent);
-              }}
+        <Button size="icon" variant="ghost" className="h-9 w-9 flex-shrink-0 text-gray-500 hover:text-gray-700">
+            <Paperclip className="w-5 h-5" />
+        </Button>
+        <div className="flex-grow flex flex-wrap items-center px-2">
+            {content.map(part =>
+              part.type === 'chip' ? (
+                <Chip
+                  key={part.id}
+                  label={part.value}
+                  color={part.color}
+                  onRemove={() => {
+                    const newContent = content.filter(p => p.id !== part.id);
+                    setContent(newContent);
+                  }}
+                />
+              ) : null
+            )}
+            <textarea
+              ref={ref}
+              value={textInput?.value || ''}
+              onChange={handleTextChange}
+              onKeyDown={handleKeyDown}
+              placeholder={content.length === 0 ? placeholder : ''}
+              className="flex-grow bg-transparent outline-none p-1 min-w-[100px] resize-none overflow-y-hidden"
+              rows={1}
+              disabled={isLoading}
             />
-          ) : null
-        )}
-        <input
-          ref={ref}
-          type="text"
-          value={textInput?.value || ''}
-          onChange={handleTextChange}
-          onKeyDown={handleLocalKeyDown}
-          placeholder={content.length === 0 ? placeholder : ''}
-          className="flex-grow bg-transparent outline-none p-1 min-w-[100px]"
-        />
+        </div>
+        <Button size="icon" onClick={onSendMessage} disabled={content.length === 0 || isLoading} className="h-9 w-9 flex-shrink-0">
+          <Send className="w-4 h-4" />
+        </Button>
       </div>
     );
   }

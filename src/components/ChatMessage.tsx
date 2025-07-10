@@ -17,7 +17,6 @@ export interface Message {
   id: string | number
   role: 'user' | 'assistant'
   content: string
-  icon?: React.ElementType
   insights?: any[]
   chartData?: any
   tableData?: any[]
@@ -40,46 +39,48 @@ export function ChatMessage({ message }: ChatMessageProps) {
   if (message.role === 'user') {
     return (
       <>
-        <div className="flex items-center justify-end gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="flex-shrink-0 text-gray-500 hover:text-gray-900"
-              >
-                <Bell className="w-5 h-5" />
-                <span className="sr-only">Set recurring prompt</span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-1">
-              <div className="flex flex-col">
+        <div className="flex items-start justify-end gap-2">
+          <div className="flex-shrink-0 order-2">
+            <Popover>
+              <PopoverTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="justify-start px-2 py-1.5 text-sm h-auto"
-                  onClick={() => handleFrequencySelect('Daily')}
+                  size="icon"
+                  className="h-8 w-8 flex-shrink-0 text-gray-500 hover:text-gray-900"
                 >
-                  Daily
+                  <Bell className="w-4 h-4" />
+                  <span className="sr-only">Set recurring prompt</span>
                 </Button>
-                <Button
-                  variant="ghost"
-                  className="justify-start px-2 py-1.5 text-sm h-auto"
-                  onClick={() => handleFrequencySelect('Weekly')}
-                >
-                  Weekly
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="justify-start px-2 py-1.5 text-sm h-auto"
-                  onClick={() => handleFrequencySelect('Monthly')}
-                >
-                  Monthly
-                </Button>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <div className="bg-blue-600 text-white rounded-lg px-4 py-2 max-w-md">
-            <p className="text-sm">{message.content}</p>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-1">
+                <div className="flex flex-col">
+                  <Button
+                    variant="ghost"
+                    className="justify-start px-2 py-1.5 text-sm h-auto"
+                    onClick={() => handleFrequencySelect('Daily')}
+                  >
+                    Daily
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="justify-start px-2 py-1.5 text-sm h-auto"
+                    onClick={() => handleFrequencySelect('Weekly')}
+                  >
+                    Weekly
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="justify-start px-2 py-1.5 text-sm h-auto"
+                    onClick={() => handleFrequencySelect('Monthly')}
+                  >
+                    Monthly
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="bg-blue-600 text-white rounded-lg px-4 py-2 max-w-2xl order-1">
+            <p className="text-sm leading-relaxed">{message.content}</p>
           </div>
         </div>
         <RecurringPromptDialog
@@ -92,11 +93,11 @@ export function ChatMessage({ message }: ChatMessageProps) {
   }
 
   return (
-    <div className="flex items-start gap-2.5">
+    <div className="flex items-start gap-3">
       <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
         <span className="text-sm font-semibold text-gray-600">AI</span>
       </div>
-      <div className="flex-1 space-y-3">
+      <div className="flex-1 space-y-3 max-w-4xl">
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 space-y-4">
           <p className="text-sm text-gray-800 leading-relaxed">{message.content}</p>
           
@@ -111,14 +112,14 @@ export function ChatMessage({ message }: ChatMessageProps) {
           )}
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="text-gray-500 hover:bg-gray-100">
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:bg-gray-100">
             <ThumbsUp className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-gray-500 hover:bg-gray-100">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:bg-gray-100">
             <ThumbsDown className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-gray-500 hover:bg-gray-100">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:bg-gray-100">
             <Copy className="w-4 h-4" />
           </Button>
         </div>
