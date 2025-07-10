@@ -32,14 +32,6 @@ const CommandMenu = ({ onSelect }: CommandMenuProps) => {
     setCurrentTitle(path[path.length - 1]);
   }, [path]);
 
-  const handleSelect = (item: Command) => {
-    if (item.children && item.children.length > 0) {
-      setPath([...path, item.name]);
-    } else {
-      onSelect(item);
-    }
-  };
-
   const goBack = () => {
     setPath(path.slice(0, -1));
   };
@@ -47,21 +39,31 @@ const CommandMenu = ({ onSelect }: CommandMenuProps) => {
   const renderItem = (item: Command) => {
     const Icon = item.icon;
     return (
-      <Button
-        key={item.name}
-        variant="ghost"
-        className="w-full justify-between h-auto py-2 px-2"
-        onClick={() => handleSelect(item)}
-      >
-        <div className="flex items-center text-left">
+      <div key={item.name} className="flex items-center w-full rounded-md hover:bg-gray-100/80">
+        <button
+          type="button"
+          className="flex-grow flex items-center text-left p-2"
+          onClick={() => onSelect(item)}
+        >
           {Icon && <Icon className="w-4 h-4 mr-3 text-gray-600 flex-shrink-0" />}
-          <div>
+          <div className="flex-1">
             <p className="text-sm font-medium">{item.name}</p>
             {item.description && <p className="text-xs text-gray-500">{item.description}</p>}
           </div>
-        </div>
-        {item.children && item.children.length > 0 && <ChevronRight className="w-4 h-4 text-gray-400" />}
-      </Button>
+        </button>
+        {item.children && item.children.length > 0 && (
+          <button
+            type="button"
+            className="p-2 rounded-md hover:bg-gray-200/80 flex-shrink-0 mr-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              setPath([...path, item.name]);
+            }}
+          >
+            <ChevronRight className="w-4 h-4 text-gray-500" />
+          </button>
+        )}
+      </div>
     );
   };
 

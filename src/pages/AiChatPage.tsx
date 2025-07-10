@@ -8,6 +8,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ChatMessage, Message as ChatMessageData } from '@/components/ChatMessage';
 import TypingIndicator from '@/components/chat/TypingIndicator';
 import CommandMenu from '@/components/CommandMenu';
+import { Command } from '@/data/commandData';
 import { 
   MessageSquare, 
   Plus, 
@@ -151,8 +152,8 @@ export const AiChatPage = () => {
     setIsCommandMenuOpen(value.startsWith('/'));
   };
 
-  const handleCommandSelect = (command: string) => {
-    setMessage(command + ' ');
+  const handleCommandSelect = (command: Command) => {
+    setMessage(command.name + ' ');
     setIsCommandMenuOpen(false);
     inputRef.current?.focus();
   };
