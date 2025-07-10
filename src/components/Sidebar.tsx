@@ -1,82 +1,101 @@
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  MessageSquare,
-  LayoutDashboard,
-  BarChart3,
-  Users,
-  Settings,
-  LifeBuoy,
-  LogOut,
+import { Separator } from '@/components/ui/separator';
+import { 
+  LayoutDashboard, 
+  BarChart3, 
+  Users, 
+  MessageSquare, 
+  Settings, 
+  HelpCircle,
+  ChevronDown,
+  Building2,
+  Target,
+  TrendingUp
 } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
   const location = useLocation();
 
-  const navItems = [
-    { name: 'AI Co-Pilot', path: '/', icon: MessageSquare },
-    { name: 'Dashboards', path: '/dashboards', icon: LayoutDashboard },
-    { name: 'Reports', path: '/reports', icon: BarChart3 },
-    { name: 'Audiences', path: '/audiences', icon: Users },
+  const navigationItems = [
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/', active: location.pathname === '/' },
+    { icon: BarChart3, label: 'LinkedIn Ads', path: '/linkedin-ads', active: location.pathname === '/linkedin-ads' },
+    { icon: Users, label: 'WebID', path: '/webid', active: location.pathname === '/webid' },
+    { icon: MessageSquare, label: 'AI Co-Pilot', path: '/ai-chat', active: location.pathname === '/ai-chat' },
+    { icon: Target, label: 'Campaigns', path: '/campaigns', active: location.pathname === '/campaigns' },
+    { icon: TrendingUp, label: 'Dashboards', path: '/dashboards', active: location.pathname === '/dashboards' },
+  ];
+
+  const bottomItems = [
+    { icon: Settings, label: 'Settings', path: '/settings' },
+    { icon: HelpCircle, label: 'Help & Support', path: '/help' },
   ];
 
   return (
-    <aside className="fixed top-0 left-0 w-64 h-full bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-4 border-b border-gray-200">
+    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen fixed left-0 top-0">
+      {/* Logo */}
+      <div className="px-6 border-b border-gray-200 flex items-center h-[69px]">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg"></div>
-          <span className="text-lg font-semibold text-gray-900">DemandSense</span>
-        </div>
-      </div>
-      <nav className="flex-1 p-4 space-y-2">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <Link key={item.path} to={item.path}>
-              <Button
-                variant={isActive ? "secondary" : "ghost"}
-                className={`w-full justify-start ${
-                  isActive 
-                    ? "bg-blue-50 text-blue-700 hover:bg-blue-100" 
-                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
-              >
-                <item.icon className="mr-3 w-5 h-5" />
-                {item.name}
-              </Button>
-            </Link>
-          );
-        })}
-      </nav>
-      <div className="p-4 border-t border-gray-200">
-        <div className="space-y-2">
-          <Button variant="ghost" className="w-full justify-start text-gray-600 hover:bg-gray-100 hover:text-gray-900">
-            <Settings className="mr-3 w-5 h-5" />
-            Settings
-          </Button>
-          <Button variant="ghost" className="w-full justify-start text-gray-600 hover:bg-gray-100 hover:text-gray-900">
-            <LifeBuoy className="mr-3 w-5 h-5" />
-            Support
-          </Button>
-        </div>
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="flex items-center">
-            <Avatar className="h-9 w-9">
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900">Sofia Davis</p>
-              <p className="text-xs text-gray-500">m.davis@example.com</p>
-            </div>
-            <Button variant="ghost" size="icon" className="ml-auto">
-              <LogOut className="w-4 h-4 text-gray-500" />
-            </Button>
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">DS</span>
           </div>
+          <span className="text-xl font-bold text-gray-900">DemandSense</span>
         </div>
       </div>
-    </aside>
+
+      {/* Workspace Selector */}
+      <div className="p-4 border-b border-gray-200">
+        <Button variant="outline" className="w-full justify-between">
+          <div className="flex items-center">
+            <Building2 className="w-4 h-4 mr-2" />
+            <span className="text-sm">Acme Corp</span>
+          </div>
+          <ChevronDown className="w-4 h-4" />
+        </Button>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 p-4">
+        <div className="space-y-1">
+          {navigationItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.path} to={item.path}>
+                <Button
+                  variant={item.active ? "secondary" : "ghost"}
+                  className={`w-full justify-start ${
+                    item.active 
+                      ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 mr-3" />
+                  {item.label}
+                </Button>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
+      {/* Bottom Navigation */}
+      <div className="p-4 border-t border-gray-200">
+        <div className="space-y-1">
+          {bottomItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.path} to={item.path}>
+                <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                  <Icon className="w-4 h-4 mr-3" />
+                  {item.label}
+                </Button>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 };
 
