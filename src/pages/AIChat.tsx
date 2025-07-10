@@ -270,11 +270,14 @@ const AIChat = () => {
                     <p className="text-gray-600 mb-8">Ask questions about your LinkedIn Ads performance and WebID visitor analytics.</p>
                     <div className="mb-4">
                       <div className="flex justify-center gap-4 mb-4">
-                        <ToggleGroup type="single" value={promptCategory} onValueChange={(v) => v && setPromptCategory(v)} size="sm">
+                        <ToggleGroup type="single" value={promptCategory} onValueChange={(v) => v && setPromptCategory(v)} size="sm" className="flex-wrap justify-center">
                           <ToggleGroupItem value="All">All</ToggleGroupItem>
                           <ToggleGroupItem value="Performance">Performance</ToggleGroupItem>
                           <ToggleGroupItem value="Optimization">Optimization</ToggleGroupItem>
                           <ToggleGroupItem value="Analysis">Analysis</ToggleGroupItem>
+                          <ToggleGroupItem value="Visitors">Visitors</ToggleGroupItem>
+                          <ToggleGroupItem value="Reporting">Reporting</ToggleGroupItem>
+                          <ToggleGroupItem value="Conversion">Conversion</ToggleGroupItem>
                         </ToggleGroup>
                       </div>
                     </div>
