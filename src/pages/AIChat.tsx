@@ -12,6 +12,7 @@ import TypingIndicator from '@/components/chat/TypingIndicator';
 import CommandMenu from '@/components/CommandMenu';
 import { ChatInput, ContentPart } from '@/components/chat/ChatInput';
 import { Command } from '@/data/commandData';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   MessageSquare, 
   Plus, 
@@ -20,7 +21,6 @@ import {
   Sparkles,
   BarChart3,
   Users,
-  History,
   TrendingUp,
   Eye,
   Target,
@@ -35,6 +35,7 @@ const AIChat = () => {
   const [promptCategory, setPromptCategory] = React.useState('All');
   const [isCommandMenuOpen, setIsCommandMenuOpen] = React.useState(false);
   const [commandQuery, setCommandQuery] = React.useState('');
+  const [chatListTab, setChatListTab] = React.useState('most-used');
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -80,12 +81,23 @@ const AIChat = () => {
   ];
 
   const filteredPrompts = suggestedPrompts.filter(p => promptCategory === 'All' || p.category === promptCategory);
-  const recentChats = [
-    { id: 1, title: "Campaign performance analysis", time: "2 hours ago", saved: false, isRecurring: false },
-    { id: 2, title: "Creative optimization insights", time: "Yesterday", saved: true, icon: Target, isRecurring: true },
-    { id: 3, title: "Visitor behavior patterns", time: "2 days ago", saved: false, isRecurring: false },
-    { id: 4, title: "CPC trend analysis", time: "3 days ago", saved: true, icon: BarChart3, isRecurring: false },
+  
+  const savedChats = [
+    { id: 2, title: "Creative optimization insights", time: "Yesterday", saved: true, isRecurring: true },
+    { id: 4, title: "CPC trend analysis", time: "3 days ago", saved: true, isRecurring: false },
   ];
+
+  const mostUsedChats = [
+    { id: 1, title: "Campaign performance analysis", time: "2 hours ago" },
+    { id: 3, title: "Visitor behavior patterns", time: "2 days ago" },
+  ];
+
+  const recentUnsavedChats = [
+    { id: 5, title: "Visitor conversion funnel analysis", time: "4 days ago" },
+    { id: 6, title: "Show US-based SaaS visitors from pricing page", time: "5 days ago" },
+    { id: 7, title: "Weekly performance breakdown by campaign", time: "6 days ago" },
+  ];
+
   const sampleCreativeData = {
     chartData: { barData: [ { name: 'Creative A', ctr: 3.2, conversions: 45 }, { name: 'Creative B', ctr: 2.1, conversions: 28 }, { name: 'Creative C', ctr: 1.4, conversions: 12 }, { name: 'Creative D', ctr: 2.8, conversions: 35 }, { name: 'Creative E', ctr: 1.9, conversions: 18 } ] },
     tableData: [ { creative: 'Creative A - "Transform Your Business"', impressions: 45230, clicks: 1447, ctr: 3.2, conversions: 45, cpa: 67, status: 'Top Performer' }, { creative: 'Creative B - "Unlock Growth Potential"', impressions: 38940, clicks: 818, ctr: 2.1, conversions: 28, cpa: 89, status: 'Good' }, { creative: 'Creative C - "Scale Your Operations"', impressions: 52100, clicks: 729, ctr: 1.4, conversions: 12, cpa: 156, status: 'Underperforming' }, { creative: 'Creative D - "Drive Results Fast"', impressions: 41200, clicks: 1154, ctr: 2.8, conversions: 35, cpa: 78, status: 'Good' }, { creative: 'Creative E - "Boost Efficiency"', impressions: 36800, clicks: 699, ctr: 1.9, conversions: 18, cpa: 112, status: 'Average' } ],
@@ -155,6 +167,12 @@ const AIChat = () => {
     setChatHistory([userMessage, aiResponse]);
   };
 
+  const listVariants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -10 },
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar />
@@ -182,7 +200,7 @@ const AIChat = () => {
                   <span className="text-sm font-medium text-gray-700">Saved</span>
                 </div>
                 <div className="space-y-2">
-                  {recentChats.filter(chat => chat.saved).map(chat => (
+                  {savedChats.map(chat => (
                     <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer border border-gray-100" onClick={() => chat.title === "Creative optimization insights" && loadCreativeOptimizationChat()}>
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
@@ -194,17 +212,35 @@ const AIChat = () => {
                 </div>
               </div>
               <div>
-                <ToggleGroup type="single" defaultValue="most-used" className="grid w-full grid-cols-2 mb-3">
+                <ToggleGroup 
+                  type="single" 
+                  defaultValue="most-used" 
+                  className="grid w-full grid-cols-2 mb-3"
+                  value={chatListTab}
+                  onValueChange={(value) => value && setChatListTab(value)}
+                >
                   <ToggleGroupItem value="most-used">Most Used</ToggleGroupItem>
                   <ToggleGroupItem value="recent">Recent</ToggleGroupItem>
                 </ToggleGroup>
-                <div className="space-y-2">
-                  {recentChats.filter(chat => !chat.saved).map(chat => (
-                    <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
-                      <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
-                      <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
-                    </div>
-                  ))}
+                <div className="relative h-40">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={chatListTab}
+                      variants={listVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={{ duration: 0.2 }}
+                      className="absolute w-full space-y-2"
+                    >
+                      {(chatListTab === 'most-used' ? mostUsedChats : recentUnsavedChats).map(chat => (
+                        <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
+                          <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
+                          <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
+                        </div>
+                      ))}
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </div>
             </ScrollArea>
