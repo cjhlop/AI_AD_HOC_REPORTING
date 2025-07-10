@@ -21,15 +21,24 @@ interface ChatInputProps {
 export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
   ({ content, setContent, placeholder, onSendMessage, isLoading }, ref) => {
     const containerRef = React.useRef<HTMLDivElement>(null);
-    const textInput = content.find(p => p.type === 'text');
+
+    const editablePart = content.length > 0 && content[content.length - 1].type === 'text' ? content[content.length - 1] : null;
+    const readOnlyParts = editablePart ? content.slice(0, -1) : content;
 
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newText = e.target.value;
-      const otherParts = content.filter(p => p.type === 'chip');
-      if (newText || otherParts.length > 0) {
-        setContent([...otherParts, { id: 'text', type: 'text', value: newText }]);
+      if (editablePart) {
+        // If there's an existing text part at the end, update it
+        const newContent = [...readOnlyParts];
+        if (newText) {
+          newContent.push({ ...editablePart, value: newText });
+        }
+        setContent(newContent);
       } else {
-        setContent([]);
+        // If the last part is a chip, add a new text part
+        if (newText) {
+          setContent([...content, { id: `text-${Date.now()}`, type: 'text', value: newText }]);
+        }
       }
     };
 
@@ -39,15 +48,10 @@ export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
         if (!isLoading) {
           onSendMessage();
         }
-      } else if (e.key === 'Backspace' && (e.target as HTMLTextAreaElement).value === '' && content.some(p => p.type === 'chip')) {
+      } else if (e.key === 'Backspace' && (e.target as HTMLTextAreaElement).value === '' && readOnlyParts.length > 0) {
         e.preventDefault();
-        const chipParts = content.filter(p => p.type === 'chip');
-        const textPart = content.find(p => p.type === 'text');
-        const newContent = chipParts.slice(0, -1);
-        if (textPart) {
-          newContent.push(textPart);
-        }
-        setContent(newContent);
+        // Remove the last chip or text block
+        setContent(readOnlyParts.slice(0, -1));
       }
     };
     
@@ -57,7 +61,7 @@ export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
             textarea.style.height = 'auto';
             textarea.style.height = `${textarea.scrollHeight}px`;
         }
-    }, [textInput?.value, ref]);
+    }, [editablePart?.value, ref]);
 
     return (
       <div
@@ -69,7 +73,7 @@ export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
             <Paperclip className="w-5 h-5" />
         </Button>
         <div className="flex-grow flex flex-wrap items-center px-2">
-            {content.map(part =>
+            {readOnlyParts.map(part =>
               part.type === 'chip' ? (
                 <Chip
                   key={part.id}
@@ -80,11 +84,13 @@ export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
                     setContent(newContent);
                   }}
                 />
-              ) : null
+              ) : (
+                <span key={part.id} className="p-1 whitespace-pre-wrap">{part.value}</span>
+              )
             )}
             <textarea
               ref={ref}
-              value={textInput?.value || ''}
+              value={editablePart?.value || ''}
               onChange={handleTextChange}
               onKeyDown={handleKeyDown}
               placeholder={content.length === 0 ? placeholder : ''}

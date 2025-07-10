@@ -39,7 +39,9 @@ const AIChat = () => {
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
-  const textValue = content.find(p => p.type === 'text')?.value || '';
+  const textValue = content.length > 0 && content[content.length - 1].type === 'text' 
+    ? content[content.length - 1].value 
+    : '';
 
   React.useEffect(() => {
     const triggerRegex = /(^|\s)\/(\S*)$/;
@@ -161,7 +163,7 @@ const AIChat = () => {
   };
 
   const handleSendMessage = (promptText?: string) => {
-    const messageToSend = promptText ?? content.map(p => p.value).join(' ').trim();
+    const messageToSend = promptText ?? content.map(p => p.value).join('').trim();
     if (!messageToSend) return;
     
     const newMessage: ChatMessageData = { id: Date.now(), role: 'user', content: messageToSend };
@@ -187,23 +189,31 @@ const AIChat = () => {
 
   const handleCommandSelect = (command: Command) => {
     const newChip: ContentPart = {
-      id: Date.now().toString(),
+      id: `chip-${Date.now()}`,
       type: 'chip',
       value: command.name,
       color: command.color,
     };
     
-    const textPart = content.find(p => p.type === 'text');
-    if (!textPart) return;
+    setContent(currentContent => {
+        const lastPart = currentContent.length > 0 ? currentContent[currentContent.length - 1] : null;
 
-    const newTextValue = textPart.value.replace(/\/\S*$/, '');
-    const chipContent = content.filter(p => p.type === 'chip');
-    
-    setContent([
-      ...chipContent, 
-      newChip, 
-      { id: 'text', type: 'text', value: newTextValue.trim() + ' ' }
-    ]);
+        if (!lastPart || lastPart.type !== 'text') {
+            return [...currentContent, newChip, { id: 'text-new', type: 'text', value: ' ' }];
+        }
+
+        const textBeforeCommand = lastPart.value.replace(/\/\S*\s*$/, '');
+        const newContent = [...currentContent.slice(0, -1)];
+
+        if (textBeforeCommand) {
+            newContent.push({ ...lastPart, value: textBeforeCommand });
+        }
+        
+        newContent.push(newChip);
+        newContent.push({ id: 'text-new', type: 'text', value: ' ' });
+        
+        return newContent;
+    });
 
     setIsCommandMenuOpen(false);
     setTimeout(() => inputRef.current?.focus(), 0);
