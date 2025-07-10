@@ -1,42 +1,31 @@
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { AiChatPage } from "@/pages/AiChatPage";
-import { RootLayout } from "@/components/RootLayout";
-import { ReportsPage } from "@/pages/ReportsPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import AIChat from "./pages/AIChat";
+import Dashboards from "./pages/Dashboards";
+import NotFound from "./pages/NotFound";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <AiChatPage />,
-      },
-      {
-        path: "ai-chat",
-        element: <AiChatPage />,
-      },
-      {
-        path: "ai-chat/:chatId",
-        element: <AiChatPage />,
-      },
-      {
-        path: "reports",
-        element: <ReportsPage />,
-      },
-    ],
-  },
-]);
+const queryClient = new QueryClient();
 
-function App() {
-  return (
+const App = () => (
+  <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <RouterProvider router={router} />
       <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/ai-chat" element={<AIChat />} />
+          <Route path="/dashboards" element={<Dashboards />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     </TooltipProvider>
-  );
-}
+  </QueryClientProvider>
+);
 
 export default App;
