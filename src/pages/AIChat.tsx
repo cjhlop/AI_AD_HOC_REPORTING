@@ -24,27 +24,8 @@ import {
   TrendingUp,
   Eye,
   Target,
-  Calendar,
-  Pin
+  Calendar
 } from 'lucide-react';
-
-interface Tool {
-  id: string;
-  text: string;
-  icon: React.ElementType;
-  category: string;
-  color: string;
-  saved: boolean;
-}
-
-const initialTools: Tool[] = [
-  { id: 'tool-1', text: "Show me top performing campaigns this month", icon: TrendingUp, category: "Performance", color: "bg-green-50 border-green-200 hover:bg-green-100", saved: true },
-  { id: 'tool-2', text: "Which creative drove 80% of MQLs?", icon: Target, category: "Optimization", color: "bg-blue-50 border-blue-200 hover:bg-blue-100", saved: true },
-  { id: 'tool-3', text: "Compare CPC trends vs last quarter", icon: BarChart3, category: "Analysis", color: "bg-purple-50 border-purple-200 hover:bg-purple-100", saved: false },
-  { id: 'tool-4', text: "Show US-based SaaS visitors from pricing page", icon: Eye, category: "Visitors", color: "bg-orange-50 border-orange-200 hover:bg-orange-100", saved: false },
-  { id: 'tool-5', text: "Weekly performance breakdown by campaign", icon: Calendar, category: "Reporting", color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100", saved: false },
-  { id: 'tool-6', text: "Visitor conversion funnel analysis", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100", saved: false }
-];
 
 const AIChat = () => {
   const [selectedModule, setSelectedModule] = React.useState('Auto');
@@ -54,8 +35,6 @@ const AIChat = () => {
   const [promptCategory, setPromptCategory] = React.useState('All');
   const [isCommandMenuOpen, setIsCommandMenuOpen] = React.useState(false);
   const [commandQuery, setCommandQuery] = React.useState('');
-  const [tools, setTools] = React.useState<Tool[]>(initialTools);
-  const [recentToolIds, setRecentToolIds] = React.useState<string[]>([]);
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -91,8 +70,22 @@ const AIChat = () => {
     { id: 'Meta Ads', label: 'Meta Ads', icon: BarChart3 }
   ];
 
-  const filteredTools = tools.filter(p => promptCategory === 'All' || p.category === promptCategory);
-  
+  const suggestedPrompts = [
+    { text: "Show me top performing campaigns this month", icon: TrendingUp, category: "Performance", color: "bg-green-50 border-green-200 hover:bg-green-100" },
+    { text: "Which creative drove 80% of MQLs?", icon: Target, category: "Optimization", color: "bg-blue-50 border-blue-200 hover:bg-blue-100" },
+    { text: "Compare CPC trends vs last quarter", icon: BarChart3, category: "Analysis", color: "bg-purple-50 border-purple-200 hover:bg-purple-100" },
+    { text: "Show US-based SaaS visitors from pricing page", icon: Eye, category: "Visitors", color: "bg-orange-50 border-orange-200 hover:bg-orange-100" },
+    { text: "Weekly performance breakdown by campaign", icon: Calendar, category: "Reporting", color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100" },
+    { text: "Visitor conversion funnel analysis", icon: Users, category: "Conversion", color: "bg-pink-50 border-pink-200 hover:bg-pink-100" }
+  ];
+
+  const filteredPrompts = suggestedPrompts.filter(p => promptCategory === 'All' || p.category === promptCategory);
+  const recentChats = [
+    { id: 1, title: "Campaign performance analysis", time: "2 hours ago", saved: false, isRecurring: false },
+    { id: 2, title: "Creative optimization insights", time: "Yesterday", saved: true, icon: Target, isRecurring: true },
+    { id: 3, title: "Visitor behavior patterns", time: "2 days ago", saved: false, isRecurring: false },
+    { id: 4, title: "CPC trend analysis", time: "3 days ago", saved: true, icon: BarChart3, isRecurring: false },
+  ];
   const sampleCreativeData = {
     chartData: { barData: [ { name: 'Creative A', ctr: 3.2, conversions: 45 }, { name: 'Creative B', ctr: 2.1, conversions: 28 }, { name: 'Creative C', ctr: 1.4, conversions: 12 }, { name: 'Creative D', ctr: 2.8, conversions: 35 }, { name: 'Creative E', ctr: 1.9, conversions: 18 } ] },
     tableData: [ { creative: 'Creative A - "Transform Your Business"', impressions: 45230, clicks: 1447, ctr: 3.2, conversions: 45, cpa: 67, status: 'Top Performer' }, { creative: 'Creative B - "Unlock Growth Potential"', impressions: 38940, clicks: 818, ctr: 2.1, conversions: 28, cpa: 89, status: 'Good' }, { creative: 'Creative C - "Scale Your Operations"', impressions: 52100, clicks: 729, ctr: 1.4, conversions: 12, cpa: 156, status: 'Underperforming' }, { creative: 'Creative D - "Drive Results Fast"', impressions: 41200, clicks: 1154, ctr: 2.8, conversions: 35, cpa: 78, status: 'Good' }, { creative: 'Creative E - "Boost Efficiency"', impressions: 36800, clicks: 699, ctr: 1.9, conversions: 18, cpa: 112, status: 'Average' } ],
@@ -124,23 +117,6 @@ const AIChat = () => {
     }, 1500);
   };
 
-  const handleToolClick = (tool: Tool) => {
-    setRecentToolIds(prev => {
-      const newRecents = [tool.id, ...prev.filter(id => id !== tool.id)];
-      return newRecents.slice(0, 4);
-    });
-    handleSendMessage(tool.text);
-  };
-
-  const handleToggleSave = (toolId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setTools(prevTools =>
-      prevTools.map(tool =>
-        tool.id === toolId ? { ...tool, saved: !tool.saved } : tool
-      )
-    );
-  };
-
   const handleCommandSelect = (command: Command) => {
     const newChip: ContentPart = {
       id: Date.now().toString(),
@@ -163,6 +139,20 @@ const AIChat = () => {
 
     setIsCommandMenuOpen(false);
     setTimeout(() => inputRef.current?.focus(), 0);
+  };
+
+  const loadCreativeOptimizationChat = () => {
+    const userMessage: ChatMessageData = { id: Date.now(), role: 'user', content: "Show me creative optimization insights for my LinkedIn campaigns" };
+    const aiResponse: ChatMessageData = {
+      id: Date.now() + 1,
+      role: 'assistant',
+      content: "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:",
+      chartData: sampleCreativeData.chartData,
+      tableData: sampleCreativeData.tableData,
+      insights: sampleCreativeData.insights,
+      closingContent: "This analysis suggests focusing on creatives similar to 'Creative A' for future campaigns to maximize conversion rates and lower CPA. Let me know if you'd like to explore other metrics or timeframes!"
+    };
+    setChatHistory([userMessage, aiResponse]);
   };
 
   return (
@@ -192,10 +182,13 @@ const AIChat = () => {
                   <span className="text-sm font-medium text-gray-700">Saved</span>
                 </div>
                 <div className="space-y-2">
-                  {tools.filter(tool => tool.saved).map(tool => (
-                    <div key={tool.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer border border-gray-100" onClick={() => handleToolClick(tool)}>
-                      <p className="text-sm font-medium text-gray-900 truncate">{tool.text}</p>
-                      <p className="text-xs text-gray-500 mt-1">{tool.category}</p>
+                  {recentChats.filter(chat => chat.saved).map(chat => (
+                    <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer border border-gray-100" onClick={() => chat.title === "Creative optimization insights" && loadCreativeOptimizationChat()}>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
+                        {chat.isRecurring && <Badge variant="secondary">Recurring</Badge>}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
                     </div>
                   ))}
                 </div>
@@ -206,16 +199,12 @@ const AIChat = () => {
                   <span className="text-sm font-medium text-gray-700">Recent</span>
                 </div>
                 <div className="space-y-2">
-                  {recentToolIds.map(id => {
-                    const tool = tools.find(t => t.id === id);
-                    if (!tool) return null;
-                    return (
-                      <div key={tool.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer" onClick={() => handleToolClick(tool)}>
-                        <p className="text-sm font-medium text-gray-900 truncate">{tool.text}</p>
-                        <p className="text-xs text-gray-500 mt-1">{tool.category}</p>
-                      </div>
-                    );
-                  })}
+                  {recentChats.filter(chat => !chat.saved).map(chat => (
+                    <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
+                      <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
+                      <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </ScrollArea>
@@ -254,21 +243,18 @@ const AIChat = () => {
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                      {filteredTools.map((tool) => {
-                        const Icon = tool.icon;
+                      {filteredPrompts.map((prompt, index) => {
+                        const Icon = prompt.icon;
                         return (
-                          <Card key={tool.id} className={`group relative cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 ${tool.color}`} onClick={() => handleToolClick(tool)}>
-                            <Button size="icon" variant="ghost" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => handleToggleSave(tool.id, e)}>
-                              <Pin className={`w-4 h-4 ${tool.saved ? 'text-blue-600 fill-blue-100' : 'text-gray-400'}`} />
-                            </Button>
+                          <Card key={index} className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 ${prompt.color}`} onClick={() => handleSendMessage(prompt.text)}>
                             <CardContent className="p-5">
                               <div className="flex items-center space-x-2 mb-3">
                                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
                                   <Icon className="w-4 h-4 text-gray-600" />
                                 </div>
-                                <Badge variant="secondary" className="text-xs px-2 py-1">{tool.category}</Badge>
+                                <Badge variant="secondary" className="text-xs px-2 py-1">{prompt.category}</Badge>
                               </div>
-                              <p className="text-sm text-gray-800 font-medium leading-relaxed text-left">{tool.text}</p>
+                              <p className="text-sm text-gray-800 font-medium leading-relaxed text-left">{prompt.text}</p>
                             </CardContent>
                           </Card>
                         );
