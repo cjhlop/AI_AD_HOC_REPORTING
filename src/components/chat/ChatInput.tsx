@@ -72,7 +72,7 @@ export const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
         <Button size="icon" variant="ghost" className="h-9 w-9 flex-shrink-0 text-gray-500 hover:text-gray-700">
             <Paperclip className="w-5 h-5" />
         </Button>
-        <div className="flex-grow flex flex-wrap items-center px-2">
+        <div className="flex-grow flex flex-wrap items-baseline px-2">
             {readOnlyParts.map(part =>
               part.type === 'chip' ? (
                 <Chip
