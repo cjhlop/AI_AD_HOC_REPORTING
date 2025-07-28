@@ -24,7 +24,6 @@ const Sidebar = () => {
     { icon: BarChart3, label: 'LinkedIn Ads', path: '/linkedin-ads', active: location.pathname === '/linkedin-ads' },
     { icon: Users, label: 'WebID', path: '/webid', active: location.pathname === '/webid' },
     { icon: MessageSquare, label: 'AI Co-Pilot', path: '/ai-chat', active: location.pathname === '/ai-chat' },
-    { icon: BrainCircuit, label: 'Memory', path: '/memory', active: location.pathname === '/memory' },
     { icon: Target, label: 'Campaigns', path: '/campaigns', active: location.pathname === '/campaigns' },
     { icon: TrendingUp, label: 'Dashboards', path: '/dashboards', active: location.pathname.startsWith('/dashboards') },
   ];

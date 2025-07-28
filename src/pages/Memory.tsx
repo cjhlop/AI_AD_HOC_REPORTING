@@ -5,7 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Upload, FileText, Trash2, MoreHorizontal } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Upload, FileText, Trash2, MoreHorizontal, Download } from 'lucide-react';
 
 const knowledgeBaseFiles = [
   { name: 'Q4_Marketing_Strategy.pdf', type: 'PDF', size: '2.1 MB', updated: '2023-10-15' },
@@ -85,9 +91,23 @@ const Memory = () => {
                           <TableCell>{file.size}</TableCell>
                           <TableCell>{file.updated}</TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem>
+                                  <Download className="mr-2 h-4 w-4" />
+                                  <span>Download</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50">
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  <span>Delete</span>
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </TableCell>
                         </TableRow>
                       ))}
