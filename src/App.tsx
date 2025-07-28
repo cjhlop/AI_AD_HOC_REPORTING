@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import LinkedInAds from "./pages/LinkedInAds";
 import WebID from "./pages/WebID";
 import Campaigns from "./pages/Campaigns";
+import Memory from "./pages/Memory";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/linkedin-ads" element={<LinkedInAds />} />
           <Route path="/webid" element={<WebID />} />
           <Route path="/campaigns" element={<Campaigns />} />
+          <Route path="/memory" element={<Memory />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

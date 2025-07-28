@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +16,7 @@ import { Command, datasets } from '@/data/commandData';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import ModuleHoverMenu from '@/components/chat/ModuleHoverMenu';
+import { Separator } from '@/components/ui/separator';
 import { 
   MessageSquare, 
   Plus, 
@@ -26,7 +28,8 @@ import {
   TrendingUp,
   Eye,
   Target,
-  Calendar
+  Calendar,
+  BrainCircuit
 } from 'lucide-react';
 
 const AIChat = () => {
@@ -315,37 +318,45 @@ const AIChat = () => {
           </div>
           <div className="flex-1 flex flex-col bg-gray-100">
             <div className="bg-white border-b border-gray-200 p-4">
-              <div className="flex items-center space-x-2">
-                {modules.map(module => {
-                  const Icon = module.icon;
-                  const hasSubMenu = module.data && module.data.children && module.data.children.length > 0;
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  {modules.map(module => {
+                    const Icon = module.icon;
+                    const hasSubMenu = module.data && module.data.children && module.data.children.length > 0;
 
-                  const badgeElement = (
-                    <Badge 
-                      variant={selectedModule === module.id ? "default" : "outline"} 
-                      className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-100' }`} 
-                      onClick={() => setSelectedModule(module.id)}
-                    >
-                      <Icon className="w-3 h-3 mr-1" />
-                      {module.label}
-                    </Badge>
-                  );
-
-                  if (hasSubMenu) {
-                    return (
-                      <HoverCard key={module.id} openDelay={100} closeDelay={100}>
-                        <HoverCardTrigger asChild>
-                          <span>{badgeElement}</span>
-                        </HoverCardTrigger>
-                        <HoverCardContent className="w-56 p-0" align="start">
-                          <ModuleHoverMenu items={module.data.children!} />
-                        </HoverCardContent>
-                      </HoverCard>
+                    const badgeElement = (
+                      <Badge 
+                        variant={selectedModule === module.id ? "default" : "outline"} 
+                        className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-100' }`} 
+                        onClick={() => setSelectedModule(module.id)}
+                      >
+                        <Icon className="w-3 h-3 mr-1" />
+                        {module.label}
+                      </Badge>
                     );
-                  }
 
-                  return badgeElement;
-                })}
+                    if (hasSubMenu) {
+                      return (
+                        <HoverCard key={module.id} openDelay={100} closeDelay={100}>
+                          <HoverCardTrigger asChild>
+                            <span>{badgeElement}</span>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-56 p-0" align="start">
+                            <ModuleHoverMenu items={module.data.children!} />
+                          </HoverCardContent>
+                        </HoverCard>
+                      );
+                    }
+
+                    return badgeElement;
+                  })}
+                </div>
+                <Link to="/memory">
+                  <Button variant="outline">
+                    <BrainCircuit className="w-4 h-4 mr-2" />
+                    Memory
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="flex-1 flex flex-col overflow-hidden">
