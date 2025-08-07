@@ -12,6 +12,7 @@ import { RecurringPromptDialog } from '@/components/RecurringPromptDialog'
 import KeyInsights from '@/components/chat/KeyInsights'
 import AnalysisChart from '@/components/chat/AnalysisChart'
 import AnalysisTable from '@/components/chat/AnalysisTable'
+import LeadsTable from '@/components/chat/LeadsTable'
 
 export interface Message {
   id: string | number
@@ -20,6 +21,7 @@ export interface Message {
   insights?: any[]
   chartData?: any
   tableData?: any[]
+  leadsData?: any[]
   closingContent?: string
 }
 
@@ -112,6 +114,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
           {message.insights && <KeyInsights insights={message.insights} />}
           {message.chartData && <AnalysisChart chartData={message.chartData} />}
           {message.tableData && <AnalysisTable tableData={message.tableData} />}
+          {message.leadsData && <LeadsTable leadsData={message.leadsData} />}
 
           {message.closingContent && (
             <p className="text-sm text-gray-800 pt-4 border-t border-gray-100 mt-4 leading-relaxed">

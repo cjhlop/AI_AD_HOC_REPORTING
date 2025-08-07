@@ -167,6 +167,14 @@ const AIChat = () => {
     insights: [ { label: 'Best Performing Creative', value: 'Creative A', trend: 'up', change: '+65% conversion rate' }, { label: 'Lowest CPA', value: '$67', trend: 'up', change: '23% below target' }, { label: 'Total Conversions', value: '138', trend: 'up', change: '+12% vs last week' } ]
   };
 
+  const sampleLeadsData = [
+    { company: 'Innovate Inc.', website: 'innovate.com', industry: 'SaaS', lastVisit: '2023-10-26', source: 'LinkedIn Ads' },
+    { company: 'Tech Solutions LLC', website: 'techsolutions.io', industry: 'IT Services', lastVisit: '2023-10-26', source: 'Organic' },
+    { company: 'DataDriven Co.', website: 'datadriven.ai', industry: 'SaaS', lastVisit: '2023-10-25', source: 'LinkedIn Ads' },
+    { company: 'CloudCorp', website: 'cloudcorp.com', industry: 'Cloud Computing', lastVisit: '2023-10-25', source: 'Direct' },
+    { company: 'Synergy Systems', website: 'synergysystems.dev', industry: 'SaaS', lastVisit: '2023-10-24', source: 'LinkedIn Ads' },
+  ];
+
   const handleSendMessage = (promptText?: string) => {
     const messageToSend = promptText ?? content.map(p => p.value).join('').trim();
     if (!messageToSend) return;
@@ -177,16 +185,38 @@ const AIChat = () => {
     setContent([]);
     
     setTimeout(() => {
-      const isCreativeQuery = messageToSend.toLowerCase().includes('creative') || messageToSend.toLowerCase().includes('optimization');
-      const aiResponse: ChatMessageData = {
-        id: Date.now() + 1,
-        role: 'assistant',
-        content: isCreativeQuery ? "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:" : "I'm analyzing your data to provide insights. Here's what I found based on your query...",
-        chartData: isCreativeQuery ? sampleCreativeData.chartData : undefined,
-        tableData: isCreativeQuery ? sampleCreativeData.tableData : undefined,
-        insights: isCreativeQuery ? sampleCreativeData.insights : undefined,
-        closingContent: isCreativeQuery ? "This analysis suggests focusing on creatives similar to 'Creative A' for future campaigns to maximize conversion rates and lower CPA. Let me know if you'd like to explore other metrics or timeframes!" : undefined,
-      };
+      const lowerCaseMessage = messageToSend.toLowerCase();
+      const isCreativeQuery = lowerCaseMessage.includes('creative') || lowerCaseMessage.includes('optimization');
+      const isVisitorQuery = lowerCaseMessage.includes('visitors from pricing page');
+
+      let aiResponse: ChatMessageData;
+
+      if (isVisitorQuery) {
+        aiResponse = {
+          id: Date.now() + 1,
+          role: 'assistant',
+          content: "I've identified US-based SaaS companies that visited your pricing page in the last 7 days. Here is a preview of the list. You can download the full list for your sales team.",
+          leadsData: sampleLeadsData,
+          closingContent: "This list is prioritized by engagement level. Let me know if you'd like to refine this audience further or push it to your CRM.",
+        };
+      } else if (isCreativeQuery) {
+        aiResponse = {
+          id: Date.now() + 1,
+          role: 'assistant',
+          content: "Based on your LinkedIn Ads data from the past 30 days, I've analyzed the performance of your 5 active creatives. Here's what the data reveals about your creative optimization opportunities:",
+          chartData: sampleCreativeData.chartData,
+          tableData: sampleCreativeData.tableData,
+          insights: sampleCreativeData.insights,
+          closingContent: "This analysis suggests focusing on creatives similar to 'Creative A' for future campaigns to maximize conversion rates and lower CPA. Let me know if you'd like to explore other metrics or timeframes!"
+        };
+      } else {
+        aiResponse = {
+          id: Date.now() + 1,
+          role: 'assistant',
+          content: "I'm analyzing your data to provide insights. Here's what I found based on your query...",
+        };
+      }
+      
       setChatHistory(prev => [...prev, aiResponse]);
       setIsLoading(false);
     }, 1500);
