@@ -57,7 +57,7 @@ const Sidebar = () => {
   return (
     <div className="w-64 bg-sidebar text-sidebar-foreground flex flex-col h-screen fixed left-0 top-0">
       {/* Logo and collapse button */}
-      <div className="px-4 border-b border-sidebar-border flex items-center justify-between h-[69px]">
+      <div className="px-4 border-b border-sidebar-border flex items-center justify-between h-[65px]">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-lg">D</span>
