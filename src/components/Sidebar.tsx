@@ -1,101 +1,102 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useSidebar } from '@/hooks/use-sidebar';
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Logo } from '@/components/Logo';
+import { Separator } from '@/components/ui/separator';
 import { 
   LayoutDashboard, 
   BarChart3, 
   Users, 
   MessageSquare, 
   Settings, 
-  LifeBuoy,
-  ChevronLeft,
+  HelpCircle,
+  ChevronDown,
+  Building2,
   Target,
-  TrendingUp
+  TrendingUp,
+  BrainCircuit
 } from 'lucide-react';
-
-const navItems = [
-  { path: '/', icon: LayoutDashboard, label: 'Home' },
-  { path: '/ai-chat', icon: MessageSquare, label: 'AI Co-Pilot' },
-  { path: '/dashboards', icon: TrendingUp, label: 'Dashboards' },
-  { path: '/linkedin-ads', icon: BarChart3, label: 'LinkedIn Ads' },
-  { path: '/webid', icon: Users, label: 'WebID' },
-  { path: '/campaigns', icon: Target, label: 'Campaigns' },
-];
-
-const bottomNavItems = [
-  { path: '/settings', icon: Settings, label: 'Settings' },
-  { path: '/help', icon: LifeBuoy, label: 'Help' },
-];
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
-  const { isCollapsed, toggle } = useSidebar();
   const location = useLocation();
 
-  const NavLink = ({ item }: { item: { path: string; icon: React.ElementType; label: string } }) => {
-    const Icon = item.icon;
-    const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
+  const navigationItems = [
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/', active: location.pathname === '/' },
+    { icon: BarChart3, label: 'LinkedIn Ads', path: '/linkedin-ads', active: location.pathname === '/linkedin-ads' },
+    { icon: Users, label: 'WebID', path: '/webid', active: location.pathname === '/webid' },
+    { icon: MessageSquare, label: 'AI Co-Pilot', path: '/ai-chat', active: location.pathname === '/ai-chat' },
+    { icon: Target, label: 'Campaigns', path: '/campaigns', active: location.pathname === '/campaigns' },
+    { icon: TrendingUp, label: 'Dashboards', path: '/dashboards', active: location.pathname.startsWith('/dashboards') },
+  ];
 
-    if (isCollapsed) {
-      return (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link to={item.path}>
-              <Button variant={isActive ? 'secondary' : 'ghost'} size="icon" className="w-full">
-                <Icon className="h-5 w-5" />
-              </Button>
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="right">{item.label}</TooltipContent>
-        </Tooltip>
-      );
-    }
-
-    return (
-      <Link to={item.path}>
-        <Button variant={isActive ? 'secondary' : 'ghost'} className="w-full justify-start">
-          <Icon className="mr-3 h-5 w-5" />
-          {item.label}
-        </Button>
-      </Link>
-    );
-  };
+  const bottomItems = [
+    { icon: Settings, label: 'Settings', path: '/settings' },
+    { icon: HelpCircle, label: 'Help & Support', path: '/help' },
+  ];
 
   return (
-    <motion.div
-      layout
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className={cn(
-        "hidden md:flex flex-col h-full bg-card border-r relative",
-        isCollapsed ? "w-20" : "w-64"
-      )}
-    >
-      <div className={cn("flex items-center p-4", isCollapsed ? "justify-center" : "justify-between")}>
-        {!isCollapsed && <span className="text-lg font-bold">DemandSense</span>}
-        <Logo />
+    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen fixed left-0 top-0">
+      {/* Logo */}
+      <div className="px-6 border-b border-gray-200 flex items-center h-[69px]">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">DS</span>
+          </div>
+          <span className="text-xl font-bold text-gray-900">DemandSense</span>
+        </div>
       </div>
-      
-      <nav className="flex-1 flex flex-col gap-y-2 px-4 py-8">
-        {navItems.map(item => <NavLink key={item.path} item={item} />)}
+
+      {/* Workspace Selector */}
+      <div className="p-4 border-b border-gray-200">
+        <Button variant="outline" className="w-full justify-between">
+          <div className="flex items-center">
+            <Building2 className="w-4 h-4 mr-2" />
+            <span className="text-sm">Acme Corp</span>
+          </div>
+          <ChevronDown className="w-4 h-4" />
+        </Button>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 p-4">
+        <div className="space-y-1">
+          {navigationItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.path} to={item.path}>
+                <Button
+                  variant={item.active ? "secondary" : "ghost"}
+                  className={`w-full justify-start ${
+                    item.active 
+                      ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 mr-3" />
+                  {item.label}
+                </Button>
+              </Link>
+            );
+          })}
+        </div>
       </nav>
 
-      <div className="mt-auto flex flex-col gap-y-2 px-4 pb-4">
-        {bottomNavItems.map(item => <NavLink key={item.path} item={item} />)}
+      {/* Bottom Navigation */}
+      <div className="p-4 border-t border-gray-200">
+        <div className="space-y-1">
+          {bottomItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.path} to={item.path}>
+                <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                  <Icon className="w-4 h-4 mr-3" />
+                  {item.label}
+                </Button>
+              </Link>
+            );
+          })}
+        </div>
       </div>
-
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute -right-4 top-1/2 -translate-y-1/2 bg-card border rounded-full h-8 w-8 hover:bg-muted"
-        onClick={toggle}
-      >
-        <ChevronLeft className={cn("h-4 w-4 transition-transform", isCollapsed && "rotate-180")} />
-      </Button>
-    </motion.div>
+    </div>
   );
 };
 

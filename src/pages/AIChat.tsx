@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import { ChatMessage, Message as ChatMessageData } from '@/components/ChatMessage';
 import TypingIndicator from '@/components/chat/TypingIndicator';
 import CommandMenu from '@/components/CommandMenu';
@@ -14,6 +16,7 @@ import { Command, datasets } from '@/data/commandData';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import ModuleHoverMenu from '@/components/chat/ModuleHoverMenu';
+import { Separator } from '@/components/ui/separator';
 import { 
   MessageSquare, 
   Plus, 
@@ -242,182 +245,188 @@ const AIChat = () => {
   };
 
   return (
-    <div className="flex h-screen bg-card">
-      <div className="w-80 border-r flex flex-col">
-        <div className="p-4 border-b">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">AI Co-Pilot</h2>
-            <Button size="sm" onClick={() => setChatHistory([])}>
-              <Plus className="w-4 h-4 mr-2" />
-              New Chat
-            </Button>
-          </div>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <Input placeholder="Search chats..." className="pl-10" />
-          </div>
-        </div>
-        <ScrollArea className="flex-1 p-4">
-          <div className="mb-6">
-            <div className="flex items-center mb-3">
-              <Bookmark className="w-4 h-4 text-muted-foreground mr-2" />
-              <span className="text-sm font-medium text-foreground">Saved</span>
+    <div className="flex h-screen bg-gray-50">
+      <Sidebar />
+      <div className="flex-1 flex flex-col ml-64">
+        <Header />
+        <div className="flex-1 flex overflow-hidden">
+          <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">AI Co-Pilot</h2>
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => setChatHistory([])}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Chat
+                </Button>
+              </div>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input placeholder="Search chats..." className="pl-10" />
+              </div>
             </div>
-            <div className="space-y-2">
-              {savedChats.map(chat => (
-                <div key={chat.id} className="p-3 rounded-lg hover:bg-muted cursor-pointer" onClick={() => chat.title === "Creative optimization insights" && loadCreativeOptimizationChat()}>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium truncate">{chat.title}</p>
-                    {chat.isRecurring && <Badge variant="secondary">Recurring</Badge>}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">{chat.time}</p>
+            <ScrollArea className="flex-1 p-4">
+              <div className="mb-6">
+                <div className="flex items-center mb-3">
+                  <Bookmark className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">Saved</span>
                 </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <ToggleGroup 
-              type="single" 
-              defaultValue="most-used" 
-              className="grid w-full grid-cols-2 mb-3"
-              value={chatListTab}
-              onValueChange={(value) => value && setChatListTab(value)}
-            >
-              <ToggleGroupItem value="most-used">Most Used</ToggleGroupItem>
-              <ToggleGroupItem value="recent">Recent</ToggleGroupItem>
-            </ToggleGroup>
-            <div className="relative h-40">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={chatListTab}
-                  variants={listVariants}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  transition={{ duration: 0.2 }}
-                  className="absolute w-full space-y-2"
-                >
-                  {(chatListTab === 'most-used' ? mostUsedChats : recentUnsavedChats).map(chat => (
-                    <div key={chat.id} className="p-3 rounded-lg hover:bg-muted cursor-pointer">
-                      <p className="text-sm font-medium truncate">{chat.title}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{chat.time}</p>
+                <div className="space-y-2">
+                  {savedChats.map(chat => (
+                    <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer border border-gray-100" onClick={() => chat.title === "Creative optimization insights" && loadCreativeOptimizationChat()}>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
+                        {chat.isRecurring && <Badge variant="secondary">Recurring</Badge>}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
                     </div>
                   ))}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </ScrollArea>
-      </div>
-      <div className="flex-1 flex flex-col bg-background">
-        <div className="bg-card/80 backdrop-blur-sm border-b p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              {modules.map(module => {
-                const Icon = module.icon;
-                const hasSubMenu = module.data && module.data.children && module.data.children.length > 0;
-
-                const badgeElement = (
-                  <Badge 
-                    variant={selectedModule === module.id ? "default" : "outline"} 
-                    className={`cursor-pointer px-3 py-1.5 text-sm ${ selectedModule === module.id ? 'bg-primary hover:bg-primary/90' : 'hover:bg-muted' }`} 
-                    onClick={() => setSelectedModule(module.id)}
-                  >
-                    <Icon className="w-4 h-4 mr-2" />
-                    {module.label}
-                  </Badge>
-                );
-
-                if (hasSubMenu) {
-                  return (
-                    <HoverCard key={module.id} openDelay={100} closeDelay={100}>
-                      <HoverCardTrigger asChild>
-                        <span>{badgeElement}</span>
-                      </HoverCardTrigger>
-                      <HoverCardContent className="w-56 p-0" align="start">
-                        <ModuleHoverMenu items={module.data.children!} />
-                      </HoverCardContent>
-                    </HoverCard>
-                  );
-                }
-
-                return badgeElement;
-              })}
-            </div>
-            <Link to="/memory">
-              <Button variant="outline">
-                <BrainCircuit className="w-4 h-4 mr-2" />
-                Memory
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {chatHistory.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
-              <div className="text-center max-w-4xl">
-                <div className="w-16 h-16 bg-card rounded-full flex items-center justify-center mx-auto mb-6 border shadow-sm">
-                  <MessageSquare className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="text-2xl font-semibold text-foreground mb-2">Welcome to DemandSense AI Co-Pilot</h3>
-                <p className="text-muted-foreground mb-8">Ask questions about your LinkedIn Ads performance and WebID visitor analytics.</p>
-                <div className="mb-4">
-                  <div className="flex justify-center gap-4 mb-4">
-                    <ToggleGroup type="single" value={promptCategory} onValueChange={(v) => v && setPromptCategory(v)} size="sm" className="flex-wrap justify-center">
-                      <ToggleGroupItem value="All">All</ToggleGroupItem>
-                      <ToggleGroupItem value="Performance">Performance</ToggleGroupItem>
-                      <ToggleGroupItem value="Optimization">Optimization</ToggleGroupItem>
-                      <ToggleGroupItem value="Analysis">Analysis</ToggleGroupItem>
-                      <ToggleGroupItem value="Visitors">Visitors</ToggleGroupItem>
-                      <ToggleGroupItem value="Reporting">Reporting</ToggleGroupItem>
-                      <ToggleGroupItem value="Conversion">Conversion</ToggleGroupItem>
-                    </ToggleGroup>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                  {filteredPrompts.map((prompt, index) => {
-                    const Icon = prompt.icon;
-                    return (
-                      <Card key={index} className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 ${prompt.color}`} onClick={() => handleSendMessage(prompt.text)}>
-                        <CardContent className="p-5">
-                          <div className="flex items-center space-x-2 mb-3">
-                            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                              <Icon className="w-4 h-4 text-gray-600" />
-                            </div>
-                            <Badge variant="secondary" className="text-xs px-2 py-1">{prompt.category}</Badge>
-                          </div>
-                          <p className="text-sm text-gray-800 font-medium leading-relaxed text-left">{prompt.text}</p>
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
                 </div>
               </div>
-            </div>
-          ) : (
-            <ScrollArea className="flex-1" ref={scrollAreaRef}>
-              <div className="space-y-6 max-w-5xl mx-auto p-6">
-                {chatHistory.map(msg => ( <ChatMessage key={msg.id} message={msg} /> ))}
-                {isLoading && <TypingIndicator />}
+              <div>
+                <ToggleGroup 
+                  type="single" 
+                  defaultValue="most-used" 
+                  className="grid w-full grid-cols-2 mb-3"
+                  value={chatListTab}
+                  onValueChange={(value) => value && setChatListTab(value)}
+                >
+                  <ToggleGroupItem value="most-used">Most Used</ToggleGroupItem>
+                  <ToggleGroupItem value="recent">Recent</ToggleGroupItem>
+                </ToggleGroup>
+                <div className="relative h-40">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={chatListTab}
+                      variants={listVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={{ duration: 0.2 }}
+                      className="absolute w-full space-y-2"
+                    >
+                      {(chatListTab === 'most-used' ? mostUsedChats : recentUnsavedChats).map(chat => (
+                        <div key={chat.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
+                          <p className="text-sm font-medium text-gray-900 truncate">{chat.title}</p>
+                          <p className="text-xs text-gray-500 mt-1">{chat.time}</p>
+                        </div>
+                      ))}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </div>
             </ScrollArea>
-          )}
-          <div className="bg-card/80 backdrop-blur-sm border-t p-4">
-            <div className="max-w-5xl mx-auto">
-              <div className="relative">
-                {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} query={commandQuery} />}
-                <div className="relative">
-                  <ChatInput
-                    ref={inputRef}
-                    content={content}
-                    setContent={setContent}
-                    placeholder="Ask about your campaigns, or type '/' for commands..."
-                    onSendMessage={() => handleSendMessage()}
-                    isLoading={isLoading}
-                  />
+          </div>
+          <div className="flex-1 flex flex-col bg-gray-100">
+            <div className="bg-white border-b border-gray-200 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  {modules.map(module => {
+                    const Icon = module.icon;
+                    const hasSubMenu = module.data && module.data.children && module.data.children.length > 0;
+
+                    const badgeElement = (
+                      <Badge 
+                        variant={selectedModule === module.id ? "default" : "outline"} 
+                        className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-100' }`} 
+                        onClick={() => setSelectedModule(module.id)}
+                      >
+                        <Icon className="w-3 h-3 mr-1" />
+                        {module.label}
+                      </Badge>
+                    );
+
+                    if (hasSubMenu) {
+                      return (
+                        <HoverCard key={module.id} openDelay={100} closeDelay={100}>
+                          <HoverCardTrigger asChild>
+                            <span>{badgeElement}</span>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-56 p-0" align="start">
+                            <ModuleHoverMenu items={module.data.children!} />
+                          </HoverCardContent>
+                        </HoverCard>
+                      );
+                    }
+
+                    return badgeElement;
+                  })}
+                </div>
+                <Link to="/memory">
+                  <Button variant="outline">
+                    <BrainCircuit className="w-4 h-4 mr-2" />
+                    Memory
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col overflow-hidden">
+              {chatHistory.length === 0 ? (
+                <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
+                  <div className="text-center max-w-4xl">
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <MessageSquare className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">Welcome to DemandSense AI Co-Pilot</h3>
+                    <p className="text-gray-600 mb-8">Ask questions about your LinkedIn Ads performance and WebID visitor analytics.</p>
+                    <div className="mb-4">
+                      <div className="flex justify-center gap-4 mb-4">
+                        <ToggleGroup type="single" value={promptCategory} onValueChange={(v) => v && setPromptCategory(v)} size="sm" className="flex-wrap justify-center">
+                          <ToggleGroupItem value="All">All</ToggleGroupItem>
+                          <ToggleGroupItem value="Performance">Performance</ToggleGroupItem>
+                          <ToggleGroupItem value="Optimization">Optimization</ToggleGroupItem>
+                          <ToggleGroupItem value="Analysis">Analysis</ToggleGroupItem>
+                          <ToggleGroupItem value="Visitors">Visitors</ToggleGroupItem>
+                          <ToggleGroupItem value="Reporting">Reporting</ToggleGroupItem>
+                          <ToggleGroupItem value="Conversion">Conversion</ToggleGroupItem>
+                        </ToggleGroup>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                      {filteredPrompts.map((prompt, index) => {
+                        const Icon = prompt.icon;
+                        return (
+                          <Card key={index} className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 ${prompt.color}`} onClick={() => handleSendMessage(prompt.text)}>
+                            <CardContent className="p-5">
+                              <div className="flex items-center space-x-2 mb-3">
+                                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                                  <Icon className="w-4 h-4 text-gray-600" />
+                                </div>
+                                <Badge variant="secondary" className="text-xs px-2 py-1">{prompt.category}</Badge>
+                              </div>
+                              <p className="text-sm text-gray-800 font-medium leading-relaxed text-left">{prompt.text}</p>
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <ScrollArea className="flex-1" ref={scrollAreaRef}>
+                  <div className="space-y-6 max-w-5xl mx-auto p-6">
+                    {chatHistory.map(msg => ( <ChatMessage key={msg.id} message={msg} /> ))}
+                    {isLoading && <TypingIndicator />}
+                  </div>
+                </ScrollArea>
+              )}
+              <div className="bg-white border-t border-gray-200 p-4">
+                <div className="max-w-5xl mx-auto">
+                  <div className="relative">
+                    {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} query={commandQuery} />}
+                    <div className="relative">
+                      <ChatInput
+                        ref={inputRef}
+                        content={content}
+                        setContent={setContent}
+                        placeholder="Ask about your campaigns, or type '/' for commands..."
+                        onSendMessage={() => handleSendMessage()}
+                        isLoading={isLoading}
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2 text-center">AI can make mistakes. Verify important information.</p>
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-2 text-center">AI can make mistakes. Verify important information.</p>
             </div>
           </div>
         </div>
