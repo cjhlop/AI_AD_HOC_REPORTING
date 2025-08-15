@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { 
   LayoutDashboard, 
   Settings, 
@@ -42,12 +41,13 @@ const Sidebar = () => {
         { label: 'Uploaded', path: '#' },
       ]
     },
+    {
+      title: 'ANALYTICS',
+      items: [
+        { icon: LayoutDashboard, label: 'Dashboards', path: '/dashboards' },
+      ]
+    }
   ];
-
-  const analyticsSection = {
-    title: 'ANALYTICS',
-    items: []
-  };
 
   const bottomItems = [
     { icon: AlertCircle, label: 'Report Issue', path: '#' },
@@ -77,7 +77,7 @@ const Sidebar = () => {
             <div className="space-y-1">
               {section.items?.map((item) => {
                 const Icon = item.icon;
-                const isActive = location.pathname === item.path;
+                const isActive = item.path === '/' ? location.pathname === item.path : location.pathname.startsWith(item.path);
                 return (
                   <Link key={item.label} to={item.path}>
                     <Button
@@ -95,11 +95,6 @@ const Sidebar = () => {
             </div>
           </div>
         ))}
-        <Separator className="my-4" />
-         <div>
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 pt-2 pb-1">{analyticsSection.title}</h3>
-            {/* Items for analytics would go here */}
-        </div>
       </nav>
 
       {/* Bottom Navigation */}
