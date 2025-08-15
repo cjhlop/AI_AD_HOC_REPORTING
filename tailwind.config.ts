@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -18,9 +17,6 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ["Rubik", "sans-serif"],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -38,10 +34,6 @@ export default {
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
-        },
-        success: {
-          DEFAULT: "hsl(var(--success))",
-          foreground: "hsl(var(--success-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -92,15 +84,10 @@ export default {
             height: "0",
           },
         },
-        "glow": {
-          "0%, 100%": { filter: "drop-shadow(0 0 2px hsl(var(--primary)))" },
-          "50%": { filter: "drop-shadow(0 0 8px hsl(var(--primary)))" },
-        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "glow": "glow 1.5s ease-in-out infinite",
       },
     },
   },
