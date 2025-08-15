@@ -85,7 +85,7 @@ const Dashboards = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background">
       {/* Fixed Main DemandSense Sidebar */}
       <Sidebar />
 
@@ -100,8 +100,8 @@ const Dashboards = () => {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Marketing Dashboards</h1>
-                <p className="text-gray-600">Interactive analytics from your AI conversations</p>
+                <h1 className="text-2xl font-bold text-foreground">Marketing Dashboards</h1>
+                <p className="text-muted-foreground">Interactive analytics from your AI conversations</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Button variant="outline" size="sm">
@@ -125,8 +125,8 @@ const Dashboards = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">Total Conversions</p>
-                      <p className="text-2xl font-bold text-gray-900">1,247</p>
+                      <p className="text-sm text-muted-foreground">Total Conversions</p>
+                      <p className="text-2xl font-bold text-foreground">1,247</p>
                     </div>
                     <div className="p-2 bg-green-100 rounded-full">
                       <TrendingUp className="w-4 h-4 text-green-600" />
@@ -140,8 +140,8 @@ const Dashboards = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">Average CPA</p>
-                      <p className="text-2xl font-bold text-gray-900">$89</p>
+                      <p className="text-sm text-muted-foreground">Average CPA</p>
+                      <p className="text-2xl font-bold text-foreground">$89</p>
                     </div>
                     <div className="p-2 bg-green-100 rounded-full">
                       <TrendingDown className="w-4 h-4 text-green-600" />
@@ -155,14 +155,14 @@ const Dashboards = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">Click-through Rate</p>
-                      <p className="text-2xl font-bold text-gray-900">2.4%</p>
+                      <p className="text-sm text-muted-foreground">Click-through Rate</p>
+                      <p className="text-2xl font-bold text-foreground">2.4%</p>
                     </div>
                     <div className="p-2 bg-blue-100 rounded-full">
-                      <TrendingUp className="w-4 h-4 text-blue-600" />
+                      <TrendingUp className="w-4 h-4 text-primary" />
                     </div>
                   </div>
-                  <p className="text-xs text-blue-600 mt-1">+5% vs last month</p>
+                  <p className="text-xs text-primary mt-1">+5% vs last month</p>
                 </CardContent>
               </Card>
 
@@ -170,14 +170,14 @@ const Dashboards = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">Active Campaigns</p>
-                      <p className="text-2xl font-bold text-gray-900">24</p>
+                      <p className="text-sm text-muted-foreground">Active Campaigns</p>
+                      <p className="text-2xl font-bold text-foreground">24</p>
                     </div>
                     <div className="p-2 bg-gray-100 rounded-full">
-                      <Minus className="w-4 h-4 text-gray-600" />
+                      <Minus className="w-4 h-4 text-muted-foreground" />
                     </div>
                   </div>
-                  <p className="text-xs text-gray-600 mt-1">No change</p>
+                  <p className="text-xs text-muted-foreground mt-1">No change</p>
                 </CardContent>
               </Card>
             </div>

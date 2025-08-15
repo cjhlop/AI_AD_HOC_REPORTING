@@ -4,45 +4,35 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 220 14% 96%; /* Neutral: Background White (slate-100) */
+    --foreground: 224 39% 20%; /* Neutral: Foreground Navy (slate-800) */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%; /* Neutral: Card & Surface White */
+    --card-foreground: 224 39% 20%; /* Neutral: Foreground Navy (slate-800) */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 224 39% 20%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 221 83% 53%; /* Primary: Brand Blue (blue-600) */
+    --primary-foreground: 0 0% 100%; /* Primary: White */
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 13% 91%; /* Neutral: Borders (slate-200) */
+    --secondary-foreground: 224 39% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14% 96%; /* Neutral: Background White (slate-100) */
+    --muted-foreground: 220 10% 40%; /* Neutral: Muted Gray/Blue (slate-500) */
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 25 95% 53%; /* Accent: Vibrant Orange (orange-500) */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%; /* Functional: Destructive Red */
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%; /* Neutral: Borders (slate-200) */
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%; /* Primary: Brand Blue (blue-600) */
 
     --radius: 0.5rem;
-
-    /* Dark sidebar theme from image */
-    --sidebar-background: 222 47% 11%; /* slate-900 */
-    --sidebar-foreground: 220 14% 71%; /* slate-300 */
-    --sidebar-primary: 210 40% 98%; /* slate-50 */
-    --sidebar-primary-foreground: 222 47% 11%; /* slate-900 */
-    --sidebar-accent: 25 95% 53%; /* orange-500 */
-    --sidebar-accent-foreground: 0 0% 100%; /* white */
-    --sidebar-border: 215 28% 17%; /* slate-800 */
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -53,5 +43,6 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Rubik', sans-serif;
   }
 }

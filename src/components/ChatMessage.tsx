@@ -49,7 +49,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 flex-shrink-0 text-gray-500 hover:text-gray-900"
+                  className="h-8 w-8 flex-shrink-0 text-muted-foreground hover:text-foreground"
                 >
                   <Bell className="w-4 h-4" />
                   <span className="sr-only">Set recurring prompt</span>
@@ -84,13 +84,13 @@ export function ChatMessage({ message }: ChatMessageProps) {
           </div>
 
           {/* Message bubble in the middle */}
-          <div className="bg-blue-600 text-white rounded-lg px-4 py-2 max-w-2xl">
+          <div className="bg-primary text-primary-foreground rounded-lg px-4 py-2 max-w-2xl">
             <p className="text-sm leading-relaxed">{message.content}</p>
           </div>
 
           {/* "Me" icon on the right */}
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <User className="w-4 h-4 text-blue-700" />
+            <User className="w-4 h-4 text-primary" />
           </div>
         </div>
         <RecurringPromptDialog
@@ -104,12 +104,12 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <div className="flex items-start gap-3">
-      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-        <span className="text-sm font-semibold text-gray-600">AI</span>
+      <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
+        <span className="text-sm font-semibold text-secondary-foreground">AI</span>
       </div>
       <div className="flex-1 space-y-3 max-w-4xl">
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 space-y-4">
-          <p className="text-sm text-gray-800 leading-relaxed">{message.content}</p>
+        <div className="bg-card rounded-lg border shadow-sm p-4 space-y-4">
+          <p className="text-sm text-card-foreground leading-relaxed">{message.content}</p>
           
           {message.insights && <KeyInsights insights={message.insights} />}
           {message.chartData && <AnalysisChart chartData={message.chartData} />}
@@ -117,20 +117,20 @@ export function ChatMessage({ message }: ChatMessageProps) {
           {message.leadsData && <LeadsTable leadsData={message.leadsData} />}
 
           {message.closingContent && (
-            <p className="text-sm text-gray-800 pt-4 border-t border-gray-100 mt-4 leading-relaxed">
+            <p className="text-sm text-card-foreground pt-4 border-t mt-4 leading-relaxed">
               {message.closingContent}
             </p>
           )}
         </div>
 
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:bg-gray-100">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-secondary">
             <ThumbsUp className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:bg-gray-100">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-secondary">
             <ThumbsDown className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:bg-gray-100">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-secondary">
             <Copy className="w-4 h-4" />
           </Button>
         </div>

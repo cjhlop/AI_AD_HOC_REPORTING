@@ -55,7 +55,7 @@ const DashboardsList = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background">
       <Sidebar />
       <div className="flex-1 flex flex-col ml-64">
         <Header />
@@ -92,9 +92,9 @@ const DashboardsList = () => {
                     <TableRow 
                       key={dashboard.id} 
                       onClick={() => handleRowClick(dashboard.id)}
-                      className="cursor-pointer hover:bg-gray-100"
+                      className="cursor-pointer hover:bg-secondary"
                     >
-                      <TableCell className="font-medium text-blue-600">{dashboard.name}</TableCell>
+                      <TableCell className="font-medium text-primary">{dashboard.name}</TableCell>
                       <TableCell>{dashboard.description}</TableCell>
                       <TableCell>{dashboard.dateCreated}</TableCell>
                       <TableCell>{dashboard.owner}</TableCell>

@@ -55,16 +55,16 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 bg-sidebar text-sidebar-foreground flex flex-col h-screen fixed left-0 top-0">
+    <div className="w-64 bg-card text-card-foreground flex flex-col h-screen fixed left-0 top-0 border-r">
       {/* Logo and collapse button */}
-      <div className="px-4 border-b border-sidebar-border flex items-center justify-between h-[65px]">
+      <div className="px-4 border-b flex items-center justify-between h-[65px]">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">D</span>
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-lg">D</span>
           </div>
-          <span className="text-xl font-bold text-white">DemandSense</span>
+          <span className="text-xl font-bold text-foreground">DemandSense</span>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-sidebar-foreground hover:bg-slate-800 hover:text-white">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-secondary">
           <ChevronLeft className="w-5 h-5" />
         </Button>
       </div>
@@ -73,7 +73,7 @@ const Sidebar = () => {
       <nav className="flex-1 p-2 space-y-2 overflow-y-auto">
         {navigationSections.map((section, sectionIndex) => (
           <div key={sectionIndex}>
-            {section.title && <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 pt-2 pb-1">{section.title}</h3>}
+            {section.title && <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 pt-2 pb-1">{section.title}</h3>}
             <div className="space-y-1">
               {section.items?.map((item) => {
                 const Icon = item.icon;
@@ -81,15 +81,12 @@ const Sidebar = () => {
                 return (
                   <Link key={item.label} to={item.path}>
                     <Button
-                      className={`w-full justify-start text-sm font-medium h-10 px-3 ${
-                        isActive 
-                          ? 'bg-sidebar-accent text-sidebar-accent-foreground hover:bg-orange-500/90' 
-                          : 'bg-transparent text-sidebar-foreground hover:bg-slate-800 hover:text-white'
-                      }`}
+                      variant={isActive ? 'secondary' : 'ghost'}
+                      className="w-full justify-start text-sm font-medium h-10 px-3"
                     >
-                      {Icon && <Icon className={`w-5 h-5 mr-3 flex-shrink-0 ${isActive ? 'text-sidebar-accent-foreground' : ''}`} />}
-                      <span className="truncate">{item.label}</span>
-                      {item.badge && <Badge variant="outline" className="ml-auto bg-white text-blue-600 hover:bg-white font-bold">{item.badge}</Badge>}
+                      {Icon && <Icon className={`w-5 h-5 mr-3 flex-shrink-0 ${isActive ? 'text-primary' : ''}`} />}
+                      <span className={`truncate ${isActive ? 'text-primary font-semibold' : ''}`}>{item.label}</span>
+                      {item.badge && <Badge variant="outline" className="ml-auto bg-accent text-accent-foreground hover:bg-accent font-bold">{item.badge}</Badge>}
                       {item.hasDropdown && <ChevronDown className="w-4 h-4 ml-auto flex-shrink-0" />}
                     </Button>
                   </Link>
@@ -98,21 +95,21 @@ const Sidebar = () => {
             </div>
           </div>
         ))}
-        <Separator className="bg-sidebar-border my-4" />
+        <Separator className="my-4" />
          <div>
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 pt-2 pb-1">{analyticsSection.title}</h3>
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 pt-2 pb-1">{analyticsSection.title}</h3>
             {/* Items for analytics would go here */}
         </div>
       </nav>
 
       {/* Bottom Navigation */}
-      <div className="p-2 border-t border-sidebar-border">
+      <div className="p-2 border-t">
         <div className="space-y-1">
           {bottomItems.map((item) => {
             const Icon = item.icon;
             return (
               <Link key={item.label} to={item.path}>
-                <Button className="w-full justify-start text-sm font-medium h-10 px-3 bg-transparent text-sidebar-foreground hover:bg-slate-800 hover:text-white">
+                <Button variant="ghost" className="w-full justify-start text-sm font-medium h-10 px-3">
                   <Icon className="w-5 h-5 mr-3 flex-shrink-0" />
                   <span className="truncate">{item.label}</span>
                   {item.hasDropdown && <ChevronDown className="w-4 h-4 ml-auto flex-shrink-0" />}

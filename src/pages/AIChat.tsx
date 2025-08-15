@@ -279,7 +279,7 @@ const AIChat = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background">
       <Sidebar />
       <div className="flex-1 flex flex-col ml-64">
         <Header />
@@ -291,8 +291,8 @@ const AIChat = () => {
             mostUsedChats={mostUsedChats}
             recentUnsavedChats={recentUnsavedChats}
           />
-          <div className="flex-1 flex flex-col bg-gray-100">
-            <div className="bg-white border-b border-gray-200 p-4">
+          <div className="flex-1 flex flex-col bg-background">
+            <div className="bg-card border-b p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   {modules.map(module => {
@@ -302,7 +302,7 @@ const AIChat = () => {
                     const badgeElement = (
                       <Badge 
                         variant={selectedModule === module.id ? "default" : "outline"} 
-                        className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-100' }`} 
+                        className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-primary hover:bg-primary/90' : 'hover:bg-secondary' }`} 
                         onClick={() => setSelectedModule(module.id)}
                       >
                         <Icon className="w-3 h-3 mr-1" />
@@ -339,10 +339,10 @@ const AIChat = () => {
                 <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
                   <div className="text-center max-w-4xl">
                     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <MessageSquare className="w-8 h-8 text-blue-600" />
+                      <MessageSquare className="w-8 h-8 text-primary" />
                     </div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">Welcome to DemandSense AI Co-Pilot</h3>
-                    <p className="text-gray-600 mb-8">Ask questions about your LinkedIn Ads performance and WebID visitor analytics.</p>
+                    <h3 className="text-2xl font-semibold text-foreground mb-2">Welcome to DemandSense AI Co-Pilot</h3>
+                    <p className="text-muted-foreground mb-8">Ask questions about your LinkedIn Ads performance and WebID visitor analytics.</p>
                     <div className="mb-4">
                       <div className="flex justify-center gap-4 mb-4">
                         <ToggleGroup type="single" value={promptCategory} onValueChange={(v) => v && setPromptCategory(v)} size="sm" className="flex-wrap justify-center">
@@ -384,7 +384,7 @@ const AIChat = () => {
                   </div>
                 </ScrollArea>
               )}
-              <div className="bg-white border-t border-gray-200 p-4">
+              <div className="bg-card border-t p-4">
                 <div className="max-w-5xl mx-auto">
                   <div className="relative">
                     {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} query={commandQuery} />}
@@ -399,7 +399,7 @@ const AIChat = () => {
                       />
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-2 text-center">AI can make mistakes. Verify important information.</p>
+                  <p className="text-xs text-muted-foreground mt-2 text-center">AI can make mistakes. Verify important information.</p>
                 </div>
               </div>
             </div>
