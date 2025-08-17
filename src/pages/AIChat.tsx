@@ -351,46 +351,45 @@ const AIChat = () => {
                   <div className="relative">
                     {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} query={commandQuery} />}
                     <div className="flex items-center gap-2 mb-2">
-                      <Button variant="outline" size="sm" className="bg-secondary">
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        Auto
-                      </Button>
-
-                      <HoverCard openDelay={100} closeDelay={100}>
-                        <HoverCardTrigger asChild>
-                          <Button variant="outline" size="sm">
-                            <FileJson className="w-4 h-4 mr-2" />
-                            Data
-                          </Button>
-                        </HoverCardTrigger>
-                        <HoverCardContent className="w-64 p-0" align="start">
-                          <ModuleHoverMenu items={datasets} onSelect={handleCommandSelect} />
-                        </HoverCardContent>
-                      </HoverCard>
-
-                      <HoverCard openDelay={100} closeDelay={100}>
-                        <HoverCardTrigger asChild>
-                          <Button variant="outline" size="sm">
-                            <Database className="w-4 h-4 mr-2" />
-                            Metrics
-                          </Button>
-                        </HoverCardTrigger>
-                        <HoverCardContent className="w-64 p-0" align="start">
-                          <ModuleHoverMenu items={metrics} onSelect={handleCommandSelect} />
-                        </HoverCardContent>
-                      </HoverCard>
-
-                      <HoverCard openDelay={100} closeDelay={100}>
-                        <HoverCardTrigger asChild>
-                          <Button variant="outline" size="sm">
-                            <ChartIcon className="w-4 h-4 mr-2" />
-                            Charts
-                          </Button>
-                        </HoverCardTrigger>
-                        <HoverCardContent className="w-64 p-0" align="start">
-                          <ModuleHoverMenu items={charts} onSelect={handleCommandSelect} />
-                        </HoverCardContent>
-                      </HoverCard>
+                      <ToggleGroup type="single" defaultValue="auto" size="sm">
+                        <ToggleGroupItem value="auto" aria-label="Toggle auto">
+                          <Sparkles className="w-4 h-4 mr-2" />
+                          Auto
+                        </ToggleGroupItem>
+                        <HoverCard openDelay={100} closeDelay={100}>
+                          <HoverCardTrigger asChild>
+                            <ToggleGroupItem value="data" aria-label="Toggle data">
+                              <FileJson className="w-4 h-4 mr-2" />
+                              Data
+                            </ToggleGroupItem>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-64 p-0" align="start">
+                            <ModuleHoverMenu items={datasets} onSelect={handleCommandSelect} />
+                          </HoverCardContent>
+                        </HoverCard>
+                        <HoverCard openDelay={100} closeDelay={100}>
+                          <HoverCardTrigger asChild>
+                            <ToggleGroupItem value="metrics" aria-label="Toggle metrics">
+                              <Database className="w-4 h-4 mr-2" />
+                              Metrics
+                            </ToggleGroupItem>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-64 p-0" align="start">
+                            <ModuleHoverMenu items={metrics} onSelect={handleCommandSelect} />
+                          </HoverCardContent>
+                        </HoverCard>
+                        <HoverCard openDelay={100} closeDelay={100}>
+                          <HoverCardTrigger asChild>
+                            <ToggleGroupItem value="charts" aria-label="Toggle charts">
+                              <ChartIcon className="w-4 h-4 mr-2" />
+                              Charts
+                            </ToggleGroupItem>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-64 p-0" align="start">
+                            <ModuleHoverMenu items={charts} onSelect={handleCommandSelect} />
+                          </HoverCardContent>
+                        </HoverCard>
+                      </ToggleGroup>
                     </div>
                     <div className="relative">
                       <ChatInput

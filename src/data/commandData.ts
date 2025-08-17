@@ -1,4 +1,4 @@
-import { BarChart2, Users, Database, LineChart, PieChart, Table } from 'lucide-react';
+import { BarChart2, Users, Database, LineChart, PieChart, Table, Map, AreaChart, BarChartHorizontal, BarChartBig, PieChart as PieChartIcon, ScatterChart, TrendingUp } from 'lucide-react';
 
 export interface Command {
   name: string;
@@ -7,6 +7,7 @@ export interface Command {
   color?: 'blue' | 'multicolor' | 'indigo' | 'orange' | 'gray';
   children?: Command[];
   type: 'dataset' | 'metric' | 'folder' | 'chart';
+  previewImage?: string;
 }
 
 // Mock data for deep nesting
@@ -91,8 +92,56 @@ export const metrics: Command[] = [
 ];
 
 export const charts: Command[] = [
-    { name: 'Bar Chart', type: 'chart', icon: BarChart2, color: 'gray' },
-    { name: 'Line Chart', type: 'chart', icon: LineChart, color: 'gray' },
-    { name: 'Pie Chart', type: 'chart', icon: PieChart, color: 'gray' },
-    { name: 'Table', type: 'chart', icon: Table, color: 'gray' },
+  {
+    name: 'Bar Charts',
+    type: 'folder',
+    icon: BarChart2,
+    children: [
+      { name: 'Bar Chart', type: 'chart', previewImage: '/chart-previews/bar_chart.png' },
+      { name: 'Grouped Bar', type: 'chart', previewImage: '/chart-previews/grouped_bar_chart.png' },
+      { name: 'Stacked Bar', type: 'chart', previewImage: '/chart-previews/stacked_bar_chart.png' },
+      { name: 'Horizontal Bar', type: 'chart', previewImage: '/chart-previews/horizontal_bar_chart.png' },
+    ],
+  },
+  {
+    name: 'Line Charts',
+    type: 'folder',
+    icon: LineChart,
+    children: [
+      { name: 'Line Chart', type: 'chart', previewImage: '/chart-previews/line_chart.png' },
+      { name: 'Multi-line', type: 'chart', previewImage: '/chart-previews/multi_line_chart.png' },
+      { name: 'Area Chart', type: 'chart', previewImage: '/chart-previews/area_chart.png' },
+      { name: 'Step Chart', type: 'chart', previewImage: '/chart-previews/step_chart.png' },
+    ],
+  },
+  {
+    name: 'Scatter Plots',
+    type: 'folder',
+    icon: ScatterChart,
+    children: [
+      { name: 'Scatter Plot', type: 'chart', previewImage: '/chart-previews/scatter_plot.png' },
+      { name: 'Bubble Chart', type: 'chart', previewImage: '/chart-previews/bubble_chart.png' },
+    ],
+  },
+  {
+    name: 'Pie Charts',
+    type: 'folder',
+    icon: PieChartIcon,
+    children: [
+      { name: 'Pie Chart', type: 'chart', previewImage: '/chart-previews/pie_chart.png' },
+      { name: 'Exploded Pie', type: 'chart', previewImage: '/chart-previews/exploded_pie_chart.png' },
+      { name: 'Multiple Pie', type: 'chart', previewImage: '/chart-previews/multiple_pie_chart.png' },
+    ],
+  },
+  {
+    name: 'Advanced',
+    type: 'folder',
+    icon: TrendingUp,
+    children: [
+      { name: 'Maps', type: 'chart', previewImage: '/chart-previews/map_chart.png' },
+      { name: 'Mixed Charts', type: 'chart', previewImage: '/chart-previews/mixed_chart.png' },
+      { name: 'Heat Maps', type: 'chart', previewImage: '/chart-previews/heatmap_chart.png' },
+      { name: 'Metrics & KPIs', type: 'chart', previewImage: '/chart-previews/metrics_chart.png' },
+    ],
+  },
 ];
