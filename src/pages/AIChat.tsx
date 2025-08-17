@@ -272,6 +272,8 @@ const AIChat = () => {
     }
   };
 
+  const chipToggleClasses = "data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground data-[state=off]:bg-transparent hover:bg-secondary/80 flex h-auto items-center justify-center rounded-full border px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+
   return (
     <div className="flex h-screen bg-background">
       <Sidebar />
@@ -351,14 +353,14 @@ const AIChat = () => {
                   <div className="relative">
                     {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} query={commandQuery} />}
                     <div className="flex items-center gap-2 mb-2">
-                      <ToggleGroup type="single" defaultValue="auto" size="sm">
-                        <ToggleGroupItem value="auto" aria-label="Toggle auto">
+                      <ToggleGroup type="single" defaultValue="auto" className="flex items-center gap-2">
+                        <ToggleGroupItem value="auto" aria-label="Toggle auto" className={chipToggleClasses}>
                           <Sparkles className="w-4 h-4 mr-2" />
                           Auto
                         </ToggleGroupItem>
                         <HoverCard openDelay={100} closeDelay={100}>
                           <HoverCardTrigger asChild>
-                            <ToggleGroupItem value="data" aria-label="Toggle data">
+                            <ToggleGroupItem value="data" aria-label="Toggle data" className={chipToggleClasses}>
                               <FileJson className="w-4 h-4 mr-2" />
                               Data
                             </ToggleGroupItem>
@@ -369,7 +371,7 @@ const AIChat = () => {
                         </HoverCard>
                         <HoverCard openDelay={100} closeDelay={100}>
                           <HoverCardTrigger asChild>
-                            <ToggleGroupItem value="metrics" aria-label="Toggle metrics">
+                            <ToggleGroupItem value="metrics" aria-label="Toggle metrics" className={chipToggleClasses}>
                               <Database className="w-4 h-4 mr-2" />
                               Metrics
                             </ToggleGroupItem>
@@ -380,7 +382,7 @@ const AIChat = () => {
                         </HoverCard>
                         <HoverCard openDelay={100} closeDelay={100}>
                           <HoverCardTrigger asChild>
-                            <ToggleGroupItem value="charts" aria-label="Toggle charts">
+                            <ToggleGroupItem value="charts" aria-label="Toggle charts" className={chipToggleClasses}>
                               <ChartIcon className="w-4 h-4 mr-2" />
                               Charts
                             </ToggleGroupItem>
