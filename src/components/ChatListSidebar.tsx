@@ -62,9 +62,9 @@ const ChatListSidebar = ({
           <div className="space-y-2">
             {savedChats.map(chat => (
               <div key={chat.id} className="p-3 rounded-lg hover:bg-secondary cursor-pointer border" onClick={() => onChatSelect(chat.id, chat.title)}>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-foreground truncate">{chat.title}</p>
-                  {chat.isRecurring && <Badge variant="secondary">Recurring</Badge>}
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-medium text-foreground truncate min-w-0">{chat.title}</p>
+                  {chat.isRecurring && <Badge variant="secondary" className="flex-shrink-0">Recurring</Badge>}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">{chat.time}</p>
               </div>
