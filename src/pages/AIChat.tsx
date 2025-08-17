@@ -386,7 +386,7 @@ const AIChat = () => {
                             </ToggleGroupItem>
                           </HoverCardTrigger>
                           <HoverCardContent className="w-64 p-0" align="start">
-                            <ModuleHoverMenu items={charts} onSelect={handleCommandSelect} />
+                            <ModuleHoverMenu items={charts} onSelect={handleCommandSelect} isChartMenu={true} />
                           </HoverCardContent>
                         </HoverCard>
                       </ToggleGroup>
