@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { CreateDashboardDialog } from '@/components/CreateDashboardDialog';
 
 const dashboardsData = [
   {
@@ -49,70 +50,74 @@ const dashboardsData = [
 
 const DashboardsList = () => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleRowClick = (dashboardId: string) => {
     navigate(`/dashboards/${dashboardId}`);
   };
 
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <div className="flex-1 flex flex-col ml-64">
-        <Header />
-        <main className="flex-1 p-6 overflow-auto">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Custom Dashboards</CardTitle>
-                  <CardDescription>
-                    Select a dashboard to view detailed analytics.
-                  </CardDescription>
+    <>
+      <div className="flex h-screen bg-background">
+        <Sidebar />
+        <div className="flex-1 flex flex-col ml-64">
+          <Header />
+          <main className="flex-1 p-6 overflow-auto">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Custom Dashboards</CardTitle>
+                    <CardDescription>
+                      Select a dashboard to view detailed analytics.
+                    </CardDescription>
+                  </div>
+                  <Button onClick={() => setIsModalOpen(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    New Dashboard
+                  </Button>
                 </div>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Dashboard
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Date Created</TableHead>
-                    <TableHead>Owner</TableHead>
-                    <TableHead>Date Updated</TableHead>
-                    <TableHead>Shared</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dashboardsData.map((dashboard) => (
-                    <TableRow 
-                      key={dashboard.id} 
-                      onClick={() => handleRowClick(dashboard.id)}
-                      className="cursor-pointer hover:bg-secondary"
-                    >
-                      <TableCell className="font-medium text-primary">{dashboard.name}</TableCell>
-                      <TableCell>{dashboard.description}</TableCell>
-                      <TableCell>{dashboard.dateCreated}</TableCell>
-                      <TableCell>{dashboard.owner}</TableCell>
-                      <TableCell>{dashboard.dateUpdated}</TableCell>
-                      <TableCell>
-                        <Badge variant={dashboard.shared ? 'default' : 'secondary'}>
-                          {dashboard.shared ? 'Yes' : 'No'}
-                        </Badge>
-                      </TableCell>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Date Created</TableHead>
+                      <TableHead>Owner</TableHead>
+                      <TableHead>Date Updated</TableHead>
+                      <TableHead>Shared</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </main>
+                  </TableHeader>
+                  <TableBody>
+                    {dashboardsData.map((dashboard) => (
+                      <TableRow 
+                        key={dashboard.id} 
+                        onClick={() => handleRowClick(dashboard.id)}
+                        className="cursor-pointer hover:bg-secondary"
+                      >
+                        <TableCell className="font-medium text-primary">{dashboard.name}</TableCell>
+                        <TableCell>{dashboard.description}</TableCell>
+                        <TableCell>{dashboard.dateCreated}</TableCell>
+                        <TableCell>{dashboard.owner}</TableCell>
+                        <TableCell>{dashboard.dateUpdated}</TableCell>
+                        <TableCell>
+                          <Badge variant={dashboard.shared ? 'default' : 'secondary'}>
+                            {dashboard.shared ? 'Yes' : 'No'}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </main>
+        </div>
       </div>
-    </div>
+      <CreateDashboardDialog isOpen={isModalOpen} onOpenChange={setIsModalOpen} />
+    </>
   );
 };
 
