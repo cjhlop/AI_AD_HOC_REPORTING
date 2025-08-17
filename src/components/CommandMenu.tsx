@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { datasets, metrics, Command } from '@/data/commandData';
+import { datasets, metrics, charts, Command } from '@/data/commandData';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 
 interface CommandMenuProps {
@@ -94,6 +94,8 @@ const CommandMenu = ({ onSelect, query }: CommandMenuProps) => {
               {filterItems(datasets).map(renderItem)}
               <p className="text-xs font-semibold text-gray-500 px-2 py-1 mt-2">Metrics</p>
               {filterItems(metrics).map(renderItem)}
+              <p className="text-xs font-semibold text-gray-500 px-2 py-1 mt-2">Charts</p>
+              {filterItems(charts).map(renderItem)}
             </>
           ) : (
             filterItems(currentItems).map(renderItem)

@@ -1,4 +1,4 @@
-import { BarChart2, Users, Database } from 'lucide-react';
+import { BarChart2, Users, Database, LineChart, PieChart, Table } from 'lucide-react';
 
 export interface Command {
   name: string;
@@ -6,7 +6,7 @@ export interface Command {
   icon?: React.ElementType;
   color?: 'blue' | 'multicolor' | 'indigo' | 'orange' | 'gray';
   children?: Command[];
-  type: 'dataset' | 'metric' | 'folder';
+  type: 'dataset' | 'metric' | 'folder' | 'chart';
 }
 
 // Mock data for deep nesting
@@ -88,4 +88,11 @@ export const metrics: Command[] = [
   { name: 'Cost per Video View', type: 'metric', icon: Database, color: 'gray' },
   { name: 'Cost per Lead (CPL)', type: 'metric', icon: Database, color: 'gray' },
   { name: 'Bounce Rate', type: 'metric', icon: Database, color: 'gray' },
+];
+
+export const charts: Command[] = [
+    { name: 'Bar Chart', type: 'chart', icon: BarChart2, color: 'gray' },
+    { name: 'Line Chart', type: 'chart', icon: LineChart, color: 'gray' },
+    { name: 'Pie Chart', type: 'chart', icon: PieChart, color: 'gray' },
+    { name: 'Table', type: 'chart', icon: Table, color: 'gray' },
 ];

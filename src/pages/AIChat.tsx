@@ -12,7 +12,7 @@ import { ChatMessage, Message as ChatMessageData } from '@/components/ChatMessag
 import TypingIndicator from '@/components/chat/TypingIndicator';
 import CommandMenu from '@/components/CommandMenu';
 import { ChatInput, ContentPart } from '@/components/chat/ChatInput';
-import { Command, datasets } from '@/data/commandData';
+import { Command, datasets, metrics, charts } from '@/data/commandData';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import ModuleHoverMenu from '@/components/chat/ModuleHoverMenu';
@@ -30,11 +30,13 @@ import {
   Eye,
   Target,
   Calendar,
-  BrainCircuit
+  BrainCircuit,
+  Database,
+  FileJson,
+  BarChart3 as ChartIcon,
 } from 'lucide-react';
 
 const AIChat = () => {
-  const [selectedModule, setSelectedModule] = React.useState('Auto');
   const [content, setContent] = React.useState<ContentPart[]>([]);
   const [chatHistory, setChatHistory] = React.useState<ChatMessageData[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -69,14 +71,6 @@ const AIChat = () => {
       });
     }
   }, [chatHistory, isLoading]);
-
-  const modules = [
-    { id: 'Auto', label: 'Auto', icon: Sparkles, data: null },
-    { id: 'LinkedIn Ads', label: 'LinkedIn Ads', icon: BarChart3, data: datasets.find(d => d.name === 'LinkedIn Ads') || null },
-    { id: 'Website Visitor', label: 'Website Visitor', icon: Users, data: datasets.find(d => d.name === 'Website Visitor') || null },
-    { id: 'Google Ads', label: 'Google Ads', icon: BarChart3, data: datasets.find(d => d.name === 'Google Ads') || null },
-    { id: 'Meta Ads', label: 'Meta Ads', icon: BarChart3, data: datasets.find(d => d.name === 'Meta Ads') || null }
-  ];
 
   const suggestedPrompts = [
     // Performance
@@ -293,39 +287,7 @@ const AIChat = () => {
           />
           <div className="flex-1 flex flex-col bg-background">
             <div className="bg-card border-b p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  {modules.map(module => {
-                    const Icon = module.icon;
-                    const hasSubMenu = module.data && module.data.children && module.data.children.length > 0;
-
-                    const badgeElement = (
-                      <Badge 
-                        variant={selectedModule === module.id ? "default" : "outline"} 
-                        className={`cursor-pointer px-3 py-1 ${ selectedModule === module.id ? 'bg-primary hover:bg-primary/90' : 'hover:bg-secondary' }`} 
-                        onClick={() => setSelectedModule(module.id)}
-                      >
-                        <Icon className="w-3 h-3 mr-1" />
-                        {module.label}
-                      </Badge>
-                    );
-
-                    if (hasSubMenu) {
-                      return (
-                        <HoverCard key={module.id} openDelay={100} closeDelay={100}>
-                          <HoverCardTrigger asChild>
-                            <span>{badgeElement}</span>
-                          </HoverCardTrigger>
-                          <HoverCardContent className="w-56 p-0" align="start">
-                            <ModuleHoverMenu items={module.data.children!} />
-                          </HoverCardContent>
-                        </HoverCard>
-                      );
-                    }
-
-                    return badgeElement;
-                  })}
-                </div>
+              <div className="flex items-center justify-end">
                 <Link to="/memory">
                   <Button variant="outline">
                     <BrainCircuit className="w-4 h-4 mr-2" />
@@ -388,6 +350,48 @@ const AIChat = () => {
                 <div className="max-w-5xl mx-auto">
                   <div className="relative">
                     {isCommandMenuOpen && <CommandMenu onSelect={handleCommandSelect} query={commandQuery} />}
+                    <div className="flex items-center gap-2 mb-2">
+                      <Button variant="outline" size="sm" className="bg-secondary">
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        Auto
+                      </Button>
+
+                      <HoverCard openDelay={100} closeDelay={100}>
+                        <HoverCardTrigger asChild>
+                          <Button variant="outline" size="sm">
+                            <FileJson className="w-4 h-4 mr-2" />
+                            Data
+                          </Button>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-64 p-0" align="start">
+                          <ModuleHoverMenu items={datasets} onSelect={handleCommandSelect} />
+                        </HoverCardContent>
+                      </HoverCard>
+
+                      <HoverCard openDelay={100} closeDelay={100}>
+                        <HoverCardTrigger asChild>
+                          <Button variant="outline" size="sm">
+                            <Database className="w-4 h-4 mr-2" />
+                            Metrics
+                          </Button>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-64 p-0" align="start">
+                          <ModuleHoverMenu items={metrics} onSelect={handleCommandSelect} />
+                        </HoverCardContent>
+                      </HoverCard>
+
+                      <HoverCard openDelay={100} closeDelay={100}>
+                        <HoverCardTrigger asChild>
+                          <Button variant="outline" size="sm">
+                            <ChartIcon className="w-4 h-4 mr-2" />
+                            Charts
+                          </Button>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-64 p-0" align="start">
+                          <ModuleHoverMenu items={charts} onSelect={handleCommandSelect} />
+                        </HoverCardContent>
+                      </HoverCard>
+                    </div>
                     <div className="relative">
                       <ChatInput
                         ref={inputRef}
