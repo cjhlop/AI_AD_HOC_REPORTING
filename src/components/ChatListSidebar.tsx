@@ -61,8 +61,8 @@ const ChatListSidebar = ({
           </div>
           <div className="space-y-2">
             {savedChats.map(chat => (
-              <div key={chat.id} className="p-3 rounded-lg hover:bg-secondary cursor-pointer border" onClick={() => onChatSelect(chat.id, chat.title)}>
-                <div className="flex items-center justify-between gap-2">
+              <div key={chat.id} className="p-3 rounded-lg hover:bg-secondary cursor-pointer border overflow-hidden" onClick={() => onChatSelect(chat.id, chat.title)}>
+                <div className="flex items-center gap-2">
                   <p className="flex-1 text-sm font-medium text-foreground truncate min-w-0">{chat.title}</p>
                   {chat.isRecurring && <Badge variant="secondary" className="flex-shrink-0">Recurring</Badge>}
                 </div>
@@ -94,7 +94,7 @@ const ChatListSidebar = ({
                 className="absolute w-full space-y-2"
               >
                 {(chatListTab === 'most-used' ? mostUsedChats : recentUnsavedChats).map(chat => (
-                  <div key={chat.id} className="p-3 rounded-lg hover:bg-secondary cursor-pointer" onClick={() => onChatSelect(chat.id, chat.title)}>
+                  <div key={chat.id} className="p-3 rounded-lg hover:bg-secondary cursor-pointer overflow-hidden" onClick={() => onChatSelect(chat.id, chat.title)}>
                     <p className="text-sm font-medium text-foreground truncate">{chat.title}</p>
                     <p className="text-xs text-muted-foreground mt-1">{chat.time}</p>
                   </div>
