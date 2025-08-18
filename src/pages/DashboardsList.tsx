@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, ArrowUpDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { CreateDashboardDialog } from '@/components/CreateDashboardDialog';
 
@@ -48,6 +48,15 @@ const dashboardsData = [
   },
 ];
 
+const SortableHeader = ({ label }: { label: string }) => (
+  <TableHead>
+    <div className="flex items-center">
+      <span className="font-semibold text-foreground">{label}</span>
+      <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground" />
+    </div>
+  </TableHead>
+);
+
 const DashboardsList = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,39 +87,41 @@ const DashboardsList = () => {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead>Date Created</TableHead>
-                      <TableHead>Owner</TableHead>
-                      <TableHead>Date Updated</TableHead>
-                      <TableHead>Shared</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {dashboardsData.map((dashboard) => (
-                      <TableRow 
-                        key={dashboard.id} 
-                        onClick={() => handleRowClick(dashboard.id)}
-                        className="cursor-pointer hover:bg-secondary"
-                      >
-                        <TableCell className="font-medium text-primary">{dashboard.name}</TableCell>
-                        <TableCell>{dashboard.description}</TableCell>
-                        <TableCell>{dashboard.dateCreated}</TableCell>
-                        <TableCell>{dashboard.owner}</TableCell>
-                        <TableCell>{dashboard.dateUpdated}</TableCell>
-                        <TableCell>
-                          <Badge variant={dashboard.shared ? 'default' : 'secondary'}>
-                            {dashboard.shared ? 'Yes' : 'No'}
-                          </Badge>
-                        </TableCell>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-blue-50 hover:bg-blue-50/90">
+                        <SortableHeader label="Name" />
+                        <SortableHeader label="Description" />
+                        <SortableHeader label="Date Created" />
+                        <SortableHeader label="Owner" />
+                        <SortableHeader label="Date Updated" />
+                        <SortableHeader label="Shared" />
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {dashboardsData.map((dashboard) => (
+                        <TableRow 
+                          key={dashboard.id} 
+                          onClick={() => handleRowClick(dashboard.id)}
+                          className="cursor-pointer"
+                        >
+                          <TableCell className="font-medium text-primary">{dashboard.name}</TableCell>
+                          <TableCell>{dashboard.description}</TableCell>
+                          <TableCell>{dashboard.dateCreated}</TableCell>
+                          <TableCell>{dashboard.owner}</TableCell>
+                          <TableCell>{dashboard.dateUpdated}</TableCell>
+                          <TableCell>
+                            <Badge variant={dashboard.shared ? 'default' : 'secondary'}>
+                              {dashboard.shared ? 'Yes' : 'No'}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </main>
